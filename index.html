@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -17,26 +16,31 @@
       box-sizing: border-box;
     }
 
+    html,
     body {
       margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
       font-family: Arial, sans-serif;
-      background: #f4f7f9;
     }
 
     header {
+      height: 82px;
       padding: 16px;
       background: #16324f;
       color: white;
     }
 
     h1 {
-      margin: 0 0 5px;
+      margin: 0 0 5px 0;
       font-size: 24px;
     }
 
     #map {
-      height: calc(100vh - 82px);
       width: 100%;
+      height: calc(100vh - 82px);
+      min-height: 400px;
     }
 
     .legend {
@@ -74,7 +78,7 @@
     .popup-title {
       font-size: 20px;
       font-weight: bold;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
 
     .popup-country {
@@ -84,7 +88,7 @@
 
     .popup-zone {
       background: #e8f1f7;
-      padding: 7px;
+      padding: 8px;
       border-radius: 6px;
       margin-bottom: 12px;
     }
@@ -114,7 +118,9 @@
 
 <div id="map"></div>
 
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 
 <script>
 
@@ -130,10 +136,11 @@
 
 
   // ==================================================
-  // KARTE
+  // 1. KARTE SOFORT ERSTELLEN
   // ==================================================
 
   const map = L.map("map").setView([10, 0], 2);
+
 
   L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -144,131 +151,111 @@
 
 
   // ==================================================
-  // KLIMAGÜRTEL
+  // 2. KLIMAGÜRTEL
   // ==================================================
 
-  const klimaZonen = [
-
-    {
-      name: "Polarzone",
-      south: 66.5,
-      north: 90,
-      color: "#d9edf7"
-    },
-
-    {
-      name: "Subpolarzone",
-      south: 55,
-      north: 66.5,
-      color: "#b9d7ea"
-    },
-
-    {
-      name: "Gemäßigte Zone",
-      south: 40,
-      north: 55,
-      color: "#a8d5ba"
-    },
-
-    {
-      name: "Subtropen",
-      south: 23.5,
-      north: 40,
-      color: "#f6d186"
-    },
-
-    {
-      name: "Tropen",
-      south: -23.5,
-      north: 23.5,
-      color: "#f4a261"
-    }
-
-  ];
-
-
-  klimaZonen.forEach(zone => {
+  function addZone(
+    name,
+    south,
+    north,
+    color
+  ) {
 
     L.rectangle(
       [
-        [zone.south, -180],
-        [zone.north, 180]
+        [south, -180],
+        [north, 180]
       ],
       {
-        color: zone.color,
-        fillColor: zone.color,
-        fillOpacity: 0.18,
+        color: color,
+        fillColor: color,
+        fillOpacity: 0.22,
         weight: 1
       }
     )
     .addTo(map)
-    .bindTooltip(zone.name);
+    .bindTooltip(name);
 
-  });
+  }
+
+
+  // Nordhalbkugel
+
+  addZone(
+    "Polarzone",
+    66.5,
+    90,
+    "#cfe8f3"
+  );
+
+  addZone(
+    "Subpolarzone",
+    55,
+    66.5,
+    "#b7d7e8"
+  );
+
+  addZone(
+    "Gemäßigte Zone",
+    40,
+    55,
+    "#b8d8ba"
+  );
+
+  addZone(
+    "Subtropen",
+    23.5,
+    40,
+    "#f4d58d"
+  );
+
+  addZone(
+    "Tropen",
+    -23.5,
+    23.5,
+    "#f3a261"
+  );
 
 
   // Südhalbkugel
 
-  const suedZonen = [
+  addZone(
+    "Subtropen",
+    -40,
+    -23.5,
+    "#f4d58d"
+  );
 
-    {
-      name: "Subtropen",
-      south: -40,
-      north: -23.5,
-      color: "#f6d186"
-    },
+  addZone(
+    "Gemäßigte Zone",
+    -55,
+    -40,
+    "#b8d8ba"
+  );
 
-    {
-      name: "Gemäßigte Zone",
-      south: -55,
-      north: -40,
-      color: "#a8d5ba"
-    },
+  addZone(
+    "Subpolarzone",
+    -66.5,
+    -55,
+    "#b7d7e8"
+  );
 
-    {
-      name: "Subpolarzone",
-      south: -66.5,
-      north: -55,
-      color: "#b9d7ea"
-    },
-
-    {
-      name: "Polarzone",
-      south: -90,
-      north: -66.5,
-      color: "#d9edf7"
-    }
-
-  ];
-
-
-  suedZonen.forEach(zone => {
-
-    L.rectangle(
-      [
-        [zone.south, -180],
-        [zone.north, 180]
-      ],
-      {
-        color: zone.color,
-        fillColor: zone.color,
-        fillOpacity: 0.18,
-        weight: 1
-      }
-    )
-    .addTo(map)
-    .bindTooltip(zone.name);
-
-  });
+  addZone(
+    "Polarzone",
+    -90,
+    -66.5,
+    "#cfe8f3"
+  );
 
 
   // ==================================================
-  // LEGENDE
+  // 3. LEGENDE
   // ==================================================
 
-  const legend = L.control({
-    position: "bottomright"
-  });
+  const legend =
+    L.control({
+      position: "bottomright"
+    });
 
 
   legend.onAdd = function () {
@@ -281,6 +268,7 @@
 
 
     div.innerHTML = `
+
       <div class="legend-title">
         Klimagürtel
       </div>
@@ -288,7 +276,7 @@
       <div class="legend-item">
         <span
           class="legend-color"
-          style="background:#d9edf7">
+          style="background:#cfe8f3">
         </span>
         Polarzone
       </div>
@@ -296,7 +284,7 @@
       <div class="legend-item">
         <span
           class="legend-color"
-          style="background:#b9d7ea">
+          style="background:#b7d7e8">
         </span>
         Subpolarzone
       </div>
@@ -304,7 +292,7 @@
       <div class="legend-item">
         <span
           class="legend-color"
-          style="background:#a8d5ba">
+          style="background:#b8d8ba">
         </span>
         Gemäßigte Zone
       </div>
@@ -312,7 +300,7 @@
       <div class="legend-item">
         <span
           class="legend-color"
-          style="background:#f6d186">
+          style="background:#f4d58d">
         </span>
         Subtropen
       </div>
@@ -320,15 +308,14 @@
       <div class="legend-item">
         <span
           class="legend-color"
-          style="background:#f4a261">
+          style="background:#f3a261">
         </span>
         Tropen
       </div>
+
     `;
 
-
     return div;
-
   };
 
 
@@ -336,22 +323,312 @@
 
 
   // ==================================================
-  // HILFSFUNKTION
+  // 4. HILFSFUNKTION
   // ==================================================
 
-  function text(wert) {
+  function text(value) {
 
     if (
-      wert === null ||
-      wert === undefined ||
-      wert === ""
+      value === null ||
+      value === undefined ||
+      value === ""
     ) {
-      return '<span class="no-data">Noch keine Angaben</span>';
+
+      return (
+        '<span class="no-data">' +
+        'Noch keine Angaben' +
+        '</span>'
+      );
+
     }
 
-    return String(wert);
+    return String(value);
+
   }
 
 
-  // ======================
+  // ==================================================
+  // 5. KLIMADATEN LADEN
+  // ==================================================
+
+  async function loadResult(placeId) {
+
+    try {
+
+      const response =
+        await fetch(
+
+          SUPABASE_URL +
+          "/rest/v1/place_results" +
+          "?select=*" +
+          "&place_id=eq." +
+          placeId +
+          "&order=created_at.desc" +
+          "&limit=1",
+
+          {
+            headers: {
+              "apikey": SUPABASE_KEY
+            }
+          }
+
+        );
+
+
+      if (!response.ok) {
+
+        console.log(
+          "Klimadaten konnten nicht geladen werden."
+        );
+
+        return null;
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      if (
+        !Array.isArray(data) ||
+        data.length === 0
+      ) {
+
+        return null;
+
+      }
+
+
+      return data[0];
+
+    }
+
+    catch (error) {
+
+      console.log(
+        "Fehler bei Klimadaten:",
+        error
+      );
+
+      return null;
+
+    }
+
+  }
+
+
+  // ==================================================
+  // 6. POPUP FÜR EINEN ORT
+  // ==================================================
+
+  async function showPlace(
+    marker,
+    place
+  ) {
+
+    marker
+      .bindPopup(
+        "<div class='popup'>" +
+        "Klimadaten werden geladen …" +
+        "</div>"
+      )
+      .openPopup();
+
+
+    const result =
+      await loadResult(place.id);
+
+
+    let climateZone =
+      "Noch keine Angabe";
+
+
+    if (
+      place.climate_zones &&
+      place.climate_zones.name
+    ) {
+
+      climateZone =
+        place.climate_zones.name;
+
+    }
+
+
+    let html = `
+
+      <div class="popup">
+
+        <div class="popup-title">
+          ${text(place.name)}
+        </div>
+
+        <div class="popup-country">
+          ${text(place.country)}
+        </div>
+
+        <div class="popup-zone">
+          🌍 <strong>Klimazone:</strong><br>
+          ${text(climateZone)}
+        </div>
+
+    `;
+
+
+    if (result) {
+
+      html += `
+
+        <div class="data-row">
+          <span class="data-label">
+            🌡️ Temperatur:
+          </span><br>
+          ${text(result.temperature)}
+        </div>
+
+        <div class="data-row">
+          <span class="data-label">
+            🌧️ Niederschlag:
+          </span><br>
+          ${text(result.precipitation)}
+        </div>
+
+        <div class="data-row">
+          <span class="data-label">
+            🌿 Vegetation:
+          </span><br>
+          ${text(result.vegetation)}
+        </div>
+
+        <div class="data-row">
+          <span class="data-label">
+            🏘️ Menschliche Nutzung:
+          </span><br>
+          ${text(result.human_use)}
+        </div>
+
+        <div class="data-row">
+          <span class="data-label">
+            💡 Erkenntnisse:
+          </span><br>
+          ${text(result.findings)}
+        </div>
+
+      `;
+
+    } else {
+
+      html += `
+
+        <div class="data-row">
+          <span class="no-data">
+            Noch keine Untersuchungsergebnisse
+            vorhanden.
+          </span>
+        </div>
+
+      `;
+
+    }
+
+
+    html += "</div>";
+
+
+    marker.setPopupContent(html);
+
+  }
+
+
+  // ==================================================
+  // 7. ORTE AUS SUPABASE LADEN
+  // ==================================================
+
+  async function loadPlaces() {
+
+    try {
+
+      const response =
+        await fetch(
+
+          SUPABASE_URL +
+          "/rest/v1/places" +
+          "?select=*,climate_zones(name)",
+
+          {
+            headers: {
+              "apikey": SUPABASE_KEY
+            }
+          }
+
+        );
+
+
+      if (!response.ok) {
+
+        console.log(
+          "Supabase konnte die Orte nicht laden."
+        );
+
+        return;
+
+      }
+
+
+      const places =
+        await response.json();
+
+
+      places.forEach(
+        function(place) {
+
+          const marker =
+            L.marker([
+              place.latitude,
+              place.longitude
+            ])
+            .addTo(map);
+
+
+          marker.on(
+            "click",
+            function() {
+
+              showPlace(
+                marker,
+                place
+              );
+
+            }
+          );
+
+        }
+      );
+
+
+    }
+
+    catch (error) {
+
+      console.log(
+        "Fehler beim Laden der Orte:",
+        error
+      );
+
+    }
+
+  }
+
+
+  // ==================================================
+  // 8. START
+  // ==================================================
+
+  loadPlaces();
+
+
+</script>
+
+</body>
+</html>
 ```
