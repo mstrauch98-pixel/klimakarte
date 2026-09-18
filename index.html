@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>EF Erdkunde (Stch) Unsere Klimakarte</title>
 
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+  >
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -23,20 +29,32 @@
       color: #222;
     }
 
+    /* ============================= */
+    /* HEADER */
+    /* ============================= */
+
     header {
       background: #0b5d7a;
       color: white;
-      padding: 14px 18px;
+      padding: 12px 18px;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+
+      gap: 15px;
       flex-wrap: wrap;
     }
 
-    header h1 {
+    .title-area h1 {
       margin: 0;
       font-size: 24px;
+    }
+
+    .subtitle {
+      margin-top: 4px;
+      font-size: 14px;
+      opacity: 0.9;
     }
 
     .header-buttons {
@@ -59,14 +77,47 @@
       font-weight: bold;
     }
 
+    .teacher-button {
+      background: white;
+      color: #0b5d7a;
+      font-weight: bold;
+    }
+
     .close-button {
       background: #ddd;
       color: #222;
     }
 
+    .submit-button {
+      background: #198754;
+      color: white;
+      font-weight: bold;
+    }
+
+    .approve-button {
+      background: #198754;
+      color: white;
+      font-weight: bold;
+    }
+
+    .reject-button {
+      background: #dc3545;
+      color: white;
+      font-weight: bold;
+    }
+
+    .logout-button {
+      background: #ddd;
+      color: #222;
+    }
+
+    /* ============================= */
+    /* MAP */
+    /* ============================= */
+
     #map {
       width: 100%;
-      height: calc(100vh - 70px);
+      height: calc(100vh - 72px);
       min-height: 500px;
     }
 
@@ -96,39 +147,60 @@
       border: 1px solid #777;
     }
 
-    /* Modal */
+    /* ============================= */
+    /* MODAL */
+    /* ============================= */
 
-    #formModal {
+    .modal {
       display: none;
+
       position: fixed;
       z-index: 2000;
+
       left: 0;
       top: 0;
+
       width: 100%;
       height: 100%;
+
       background: rgba(0,0,0,0.55);
+
       overflow-y: auto;
+
       padding: 20px;
     }
 
-    .form-box {
+    .box {
       background: white;
-      max-width: 700px;
+
+      max-width: 760px;
+
       margin: 20px auto;
+
       padding: 22px;
+
       border-radius: 14px;
-      box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+
+      box-shadow:
+        0 5px 30px rgba(0,0,0,0.3);
     }
 
-    .form-box h2 {
+    .box h2 {
       margin-top: 0;
       color: #0b5d7a;
     }
 
+    /* ============================= */
+    /* FORMULAR */
+    /* ============================= */
+
     .form-intro {
       background: #eef7fa;
+
       padding: 12px;
+
       border-radius: 8px;
+
       margin-bottom: 18px;
     }
 
@@ -138,7 +210,9 @@
 
     .form-group label {
       display: block;
+
       font-weight: bold;
+
       margin-bottom: 5px;
     }
 
@@ -146,20 +220,22 @@
     select,
     textarea {
       width: 100%;
+
       padding: 10px;
+
       border: 1px solid #bbb;
+
       border-radius: 7px;
+
       font-family: inherit;
+
       font-size: 15px;
     }
 
     textarea {
       min-height: 90px;
-      resize: vertical;
-    }
 
-    input[readonly] {
-      background: #f1f1f1;
+      resize: vertical;
     }
 
     .location-button {
@@ -170,103 +246,261 @@
 
     .location-status {
       margin-top: 8px;
+
       padding: 8px;
+
       border-radius: 6px;
+
       background: #f1f1f1;
+
       font-size: 14px;
     }
 
     .form-actions {
       display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
 
-    .submit-button {
-      background: #198754;
-      color: white;
-      font-weight: bold;
+      gap: 10px;
+
+      justify-content: flex-end;
+
+      margin-top: 20px;
+
+      flex-wrap: wrap;
     }
 
     .info-box {
       background: #fff8dc;
+
       border-left: 4px solid #f4c542;
+
       padding: 10px;
+
       margin-top: 15px;
+
       font-size: 14px;
     }
 
-    .student-marker {
-      font-size: 22px;
+    /* ============================= */
+    /* LEHRERBEREICH */
+    /* ============================= */
+
+    .teacher-intro {
+      background: #eef7fa;
+
+      padding: 12px;
+
+      border-radius: 8px;
+
+      margin-bottom: 18px;
     }
 
+    .submission-card {
+      border: 1px solid #ddd;
+
+      border-radius: 10px;
+
+      padding: 15px;
+
+      margin-bottom: 15px;
+
+      background: #fafafa;
+    }
+
+    .submission-card h3 {
+      margin-top: 0;
+
+      color: #0b5d7a;
+    }
+
+    .submission-card p {
+      margin: 7px 0;
+    }
+
+    .submission-actions {
+      display: flex;
+
+      gap: 8px;
+
+      margin-top: 15px;
+
+      flex-wrap: wrap;
+    }
+
+    .status-pending {
+      display: inline-block;
+
+      background: #fff3cd;
+
+      color: #664d03;
+
+      padding: 4px 8px;
+
+      border-radius: 5px;
+
+      font-size: 13px;
+
+      font-weight: bold;
+    }
+
+    .empty-message {
+      background: #e9f7ef;
+
+      padding: 15px;
+
+      border-radius: 8px;
+    }
+
+    .login-error {
+      display: none;
+
+      background: #f8d7da;
+
+      color: #842029;
+
+      padding: 10px;
+
+      border-radius: 7px;
+
+      margin-bottom: 12px;
+    }
+
+    .teacher-toolbar {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+
+      margin-bottom: 15px;
+    }
+
+    /* ============================= */
+    /* MOBILE */
+    /* ============================= */
+
     @media (max-width: 600px) {
+
       header {
         align-items: flex-start;
       }
 
-      header h1 {
+      .title-area h1 {
         font-size: 20px;
       }
 
       #map {
-        height: calc(100vh - 105px);
+        height: calc(100vh - 110px);
       }
 
-      #formModal {
+      .modal {
         padding: 8px;
       }
 
-      .form-box {
+      .box {
         margin: 5px auto;
+
         padding: 16px;
       }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
+<!-- ========================================================= -->
+<!-- HEADER -->
+<!-- ========================================================= -->
+
 <header>
-  <h1>EF Erdkunde (Stch) 🌍 Unsere Klimakarte</h1>
+
+  <div class="title-area">
+
+    <h1>
+      EF Erdkunde (Stch) 🌍 Unsere Klimakarte
+    </h1>
+
+    <div class="subtitle">
+      2026/27 · 1. Halbjahr · Stadtgymnasium Detmold
+    </div>
+
+  </div>
+
 
   <div class="header-buttons">
+
     <button
       class="student-button"
       onclick="openStudentForm()"
     >
       ➕ Beitrag einreichen
     </button>
+
+    <button
+      class="teacher-button"
+      onclick="openTeacherArea()"
+    >
+      👩‍🏫 Lehrerbereich
+    </button>
+
   </div>
+
 </header>
+
+
+<!-- ========================================================= -->
+<!-- KARTE -->
+<!-- ========================================================= -->
 
 <div id="map"></div>
 
 
 <!-- ========================================================= -->
-<!-- SCHÜLER-FORMULAR -->
+<!-- SCHÜLERFORMULAR -->
 <!-- ========================================================= -->
 
-<div id="formModal">
+<div
+  id="studentModal"
+  class="modal"
+>
 
-  <div class="form-box">
+  <div class="box">
 
-    <h2>➕ Einen Beitrag zur Klimakarte hinzufügen</h2>
+    <h2>
+      ➕ Beitrag zur Klimakarte
+    </h2>
+
 
     <div class="form-intro">
+
       <strong>So geht's:</strong><br>
-      1. Gib den Ort ein.<br>
-      2. Klicke auf „📍 Ort auf Karte auswählen“ und anschließend auf die gewünschte Stelle auf der Karte.<br>
-      3. Trage eure Untersuchungsergebnisse ein.<br>
-      4. Klicke auf „Beitrag absenden“.
+
+      1. Ort eingeben.<br>
+
+      2. Auf „Ort auf Karte auswählen“ klicken.<br>
+
+      3. Auf der Karte den Ort anklicken.<br>
+
+      4. Untersuchungsergebnisse eintragen.<br>
+
+      5. Beitrag absenden.
+
     </div>
 
 
     <form id="studentForm">
 
+
       <div class="form-group">
+
         <label for="name">
           Ort *
         </label>
@@ -277,10 +511,12 @@
           placeholder="z. B. Manaus"
           required
         >
+
       </div>
 
 
       <div class="form-group">
+
         <label for="country">
           Land
         </label>
@@ -290,6 +526,7 @@
           type="text"
           placeholder="z. B. Brasilien"
         >
+
       </div>
 
 
@@ -299,6 +536,7 @@
           📍 Position
         </label>
 
+
         <button
           type="button"
           class="location-button"
@@ -307,12 +545,14 @@
           📍 Ort auf Karte auswählen
         </button>
 
+
         <div
           id="locationStatus"
           class="location-status"
         >
           Noch keinen Ort ausgewählt.
         </div>
+
 
         <input
           id="latitude"
@@ -337,9 +577,11 @@
           id="climateZone"
           required
         >
+
           <option value="">
             Bitte auswählen
           </option>
+
         </select>
 
       </div>
@@ -426,14 +668,18 @@
         <input
           id="source"
           type="text"
-          placeholder="z. B. Wikipedia, Klimadiagramm, Schulbuch ..."
+          placeholder="z. B. Schulbuch, Klimadiagramm, Website ..."
         >
 
       </div>
 
 
       <div class="info-box">
-        ℹ️ Dein Beitrag wird zunächst geprüft. Erst nach der Freigabe durch die Lehrkraft erscheint er auf der gemeinsamen Klimakarte.
+
+        ℹ️ Der Beitrag wird zunächst geprüft.
+        Erst nach der Freigabe durch die Lehrkraft
+        erscheint er auf der Klimakarte.
+
       </div>
 
 
@@ -447,6 +693,7 @@
           Abbrechen
         </button>
 
+
         <button
           type="submit"
           class="submit-button"
@@ -456,6 +703,7 @@
 
       </div>
 
+
     </form>
 
   </div>
@@ -463,7 +711,169 @@
 </div>
 
 
+<!-- ========================================================= -->
+<!-- LEHRER LOGIN -->
+<!-- ========================================================= -->
+
+<div
+  id="teacherLoginModal"
+  class="modal"
+>
+
+  <div class="box">
+
+    <h2>
+      👩‍🏫 Lehrerbereich
+    </h2>
+
+
+    <p>
+      Bitte mit deinem Lehreraccount anmelden.
+    </p>
+
+
+    <div
+      id="loginError"
+      class="login-error"
+    ></div>
+
+
+    <form id="loginForm">
+
+
+      <div class="form-group">
+
+        <label for="teacherEmail">
+          E-Mail
+        </label>
+
+        <input
+          id="teacherEmail"
+          type="email"
+          required
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="teacherPassword">
+          Passwort
+        </label>
+
+        <input
+          id="teacherPassword"
+          type="password"
+          required
+        >
+
+      </div>
+
+
+      <div class="form-actions">
+
+        <button
+          type="button"
+          class="close-button"
+          onclick="closeTeacherLogin()"
+        >
+          Abbrechen
+        </button>
+
+
+        <button
+          type="submit"
+          class="submit-button"
+        >
+          🔐 Anmelden
+        </button>
+
+      </div>
+
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- LEHRERBEREICH -->
+<!-- ========================================================= -->
+
+<div
+  id="teacherModal"
+  class="modal"
+>
+
+  <div class="box">
+
+    <div class="teacher-toolbar">
+
+      <h2 style="margin:0">
+        👩‍🏫 Lehrerbereich
+      </h2>
+
+      <button
+        class="logout-button"
+        onclick="teacherLogout()"
+      >
+        Abmelden
+      </button>
+
+    </div>
+
+
+    <div class="teacher-intro">
+
+      Hier erscheinen die Beiträge,
+      die von Schülerinnen und Schülern
+      eingereicht wurden.
+
+      <br><br>
+
+      <strong>
+        Prüfe die Angaben und entscheide,
+        ob der Beitrag auf der Klimakarte
+        veröffentlicht werden soll.
+      </strong>
+
+    </div>
+
+
+    <div id="submissionList">
+
+      Beiträge werden geladen ...
+
+    </div>
+
+
+    <div class="form-actions">
+
+      <button
+        class="close-button"
+        onclick="closeTeacherArea()"
+      >
+        Schließen
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- LIBRARIES -->
+<!-- ========================================================= -->
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
 
@@ -474,21 +884,34 @@
   const SUPABASE_URL =
     "https://wtfwbelrlorgggcyyztj.supabase.co";
 
+
   const SUPABASE_KEY =
     "sb_publishable_uSIbU0bHTGfcTDqoDuSiAQ_VwdT8R9o";
+
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
 
   /* ========================================================= */
   /* KARTE */
   /* ========================================================= */
 
-  const map = L.map("map").setView([10, 0], 2);
+  const map =
+    L.map("map").setView(
+      [10, 0],
+      2
+    );
 
 
   L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
-      attribution: "&copy; OpenStreetMap-Mitwirkende"
+      attribution:
+        "&copy; OpenStreetMap-Mitwirkende"
     }
   ).addTo(map);
 
@@ -511,8 +934,11 @@
       ],
       {
         color: color,
+
         fillColor: color,
+
         fillOpacity: 0.20,
+
         weight: 1
       }
     )
@@ -529,6 +955,7 @@
     "#8ecae6"
   );
 
+
   addZone(
     "Polarzone",
     -90,
@@ -544,6 +971,7 @@
     "#90be6d"
   );
 
+
   addZone(
     "Subpolarzone",
     -66.5,
@@ -559,6 +987,7 @@
     "#f9c74f"
   );
 
+
   addZone(
     "Gemäßigte Zone",
     -55,
@@ -573,6 +1002,7 @@
     40,
     "#f9844a"
   );
+
 
   addZone(
     "Subtropen",
@@ -594,74 +1024,81 @@
   /* LEGENDE */
   /* ========================================================= */
 
-  const legend = L.control({
-    position: "bottomright"
-  });
+  const legend =
+    L.control({
+      position: "bottomright"
+    });
 
 
-  legend.onAdd = function () {
+  legend.onAdd =
+    function() {
 
-    const div = L.DomUtil.create(
-      "div",
-      "legend"
-    );
+      const div =
+        L.DomUtil.create(
+          "div",
+          "legend"
+        );
 
-    div.innerHTML = `
-      <div class="legend-title">
-        Klimazonen
-      </div>
 
-      <div class="legend-row">
-        <span
-          class="legend-color"
-          style="background:#8ecae6"
-        ></span>
-        Polarzone
-      </div>
+      div.innerHTML = `
 
-      <div class="legend-row">
-        <span
-          class="legend-color"
-          style="background:#90be6d"
-        ></span>
-        Subpolarzone
-      </div>
+        <div class="legend-title">
+          Klimazonen
+        </div>
 
-      <div class="legend-row">
-        <span
-          class="legend-color"
-          style="background:#f9c74f"
-        ></span>
-        Gemäßigte Zone
-      </div>
+        <div class="legend-row">
+          <span
+            class="legend-color"
+            style="background:#8ecae6"
+          ></span>
+          Polarzone
+        </div>
 
-      <div class="legend-row">
-        <span
-          class="legend-color"
-          style="background:#f9844a"
-        ></span>
-        Subtropen
-      </div>
+        <div class="legend-row">
+          <span
+            class="legend-color"
+            style="background:#90be6d"
+          ></span>
+          Subpolarzone
+        </div>
 
-      <div class="legend-row">
-        <span
-          class="legend-color"
-          style="background:#90be6d"
-        ></span>
-        Tropen
-      </div>
-    `;
+        <div class="legend-row">
+          <span
+            class="legend-color"
+            style="background:#f9c74f"
+          ></span>
+          Gemäßigte Zone
+        </div>
 
-    return div;
+        <div class="legend-row">
+          <span
+            class="legend-color"
+            style="background:#f9844a"
+          ></span>
+          Subtropen
+        </div>
 
-  };
+        <div class="legend-row">
+          <span
+            class="legend-color"
+            style="background:#90be6d"
+          ></span>
+          Tropen
+        </div>
+
+      `;
+
+
+      return div;
+
+    };
 
 
   legend.addTo(map);
 
 
   /* ========================================================= */
-  /* HILFSFUNKTIONEN */
+  /* HILFSFUNKTION */
   /* ========================================================= */
 
   function escapeHtml(value) {
@@ -670,8 +1107,11 @@
       value === null ||
       value === undefined
     ) {
+
       return "";
+
     }
+
 
     return String(value)
       .replace(/&/g, "&amp;")
@@ -698,33 +1138,23 @@
 
     try {
 
-      const response = await fetch(
-        SUPABASE_URL +
-        "/rest/v1/climate_zones?select=id,name&order=id",
-        {
-          headers: {
-            "apikey": SUPABASE_KEY,
-            "Authorization":
-              "Bearer " + SUPABASE_KEY
-          }
-        }
-      );
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("climate_zones")
+          .select("id,name")
+          .order("id");
 
 
-      if (!response.ok) {
+      if (error) {
 
-        console.error(
-          "Klimazonen konnten nicht geladen werden:",
-          await response.text()
-        );
+        console.error(error);
 
         return;
 
       }
-
-
-      const zones =
-        await response.json();
 
 
       const select =
@@ -733,190 +1163,67 @@
         );
 
 
-      zones.forEach(zone => {
+      data.forEach(zone => {
 
         const option =
-          document.createElement("option");
+          document.createElement(
+            "option"
+          );
 
-        option.value = zone.id;
-        option.textContent = zone.name;
 
-        select.appendChild(option);
+        option.value =
+          zone.id;
+
+
+        option.textContent =
+          zone.name;
+
+
+        select.appendChild(
+          option
+        );
 
       });
 
-    } catch (error) {
-
-      console.error(error);
-
-    }
-
-  }
-
-
-  /* ========================================================= */
-  /* ERGEBNISSE EINES ORTES LADEN */
-  /* ========================================================= */
-
-  async function loadResult(placeId) {
-
-    try {
-
-      const response = await fetch(
-        SUPABASE_URL +
-        "/rest/v1/place_results" +
-        "?select=*" +
-        "&place_id=eq." +
-        encodeURIComponent(placeId) +
-        "&order=created_at.desc" +
-        "&limit=1",
-        {
-          headers: {
-            "apikey": SUPABASE_KEY,
-            "Authorization":
-              "Bearer " + SUPABASE_KEY
-          }
-        }
-      );
-
-
-      if (!response.ok) {
-        return null;
-      }
-
-
-      const data =
-        await response.json();
-
-
-      if (!data.length) {
-        return null;
-      }
-
-
-      return data[0];
 
     } catch (error) {
 
       console.error(error);
 
-      return null;
-
     }
 
   }
 
 
   /* ========================================================= */
-  /* BESTEHENDE RAUMBEISPIELE */
+  /* BESTEHENDE ORTE LADEN */
   /* ========================================================= */
-
-  async function showPlace(
-    marker,
-    place
-  ) {
-
-    let popup = `
-      <div style="min-width:230px">
-
-        <h3 style="margin-top:0">
-          ${text(place.name)}
-        </h3>
-
-        <p>
-          <strong>Land:</strong>
-          ${text(place.country)}
-        </p>
-    `;
-
-
-    if (
-      place.climate_zones &&
-      place.climate_zones.name
-    ) {
-
-      popup += `
-        <p>
-          <strong>Klimazone:</strong>
-          ${text(place.climate_zones.name)}
-        </p>
-      `;
-
-    }
-
-
-    const result =
-      await loadResult(place.id);
-
-
-    if (result) {
-
-      popup += `
-        <hr>
-
-        <p>
-          <strong>🌡️ Temperatur:</strong><br>
-          ${text(result.temperature)}
-        </p>
-
-        <p>
-          <strong>🌧️ Niederschlag:</strong><br>
-          ${text(result.precipitation)}
-        </p>
-
-        <p>
-          <strong>🌿 Vegetation:</strong><br>
-          ${text(result.vegetation)}
-        </p>
-
-        <p>
-          <strong>🏘️ Menschliche Nutzung:</strong><br>
-          ${text(result.human_use)}
-        </p>
-
-        <p>
-          <strong>💡 Erkenntnis:</strong><br>
-          ${text(result.findings)}
-        </p>
-      `;
-
-    }
-
-
-    popup += `
-      </div>
-    `;
-
-
-    marker
-      .bindPopup(popup)
-      .openPopup();
-
-  }
-
 
   async function loadPlaces() {
 
     try {
 
-      const response = await fetch(
-        SUPABASE_URL +
-        "/rest/v1/places" +
-        "?select=*,climate_zones(name)",
-        {
-          headers: {
-            "apikey": SUPABASE_KEY,
-            "Authorization":
-              "Bearer " + SUPABASE_KEY
+      const response =
+        await fetch(
+          SUPABASE_URL +
+          "/rest/v1/places" +
+          "?select=*,climate_zones(name)",
+          {
+            headers: {
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " +
+                SUPABASE_KEY
+            }
           }
-        }
-      );
+        );
 
 
       if (!response.ok) {
 
         console.error(
-          "Orte konnten nicht geladen werden:",
           await response.text()
         );
 
@@ -940,7 +1247,11 @@
 
         marker.on(
           "click",
-          () => showPlace(marker, place)
+          () =>
+            showPlace(
+              marker,
+              place
+            )
         );
 
       });
@@ -948,12 +1259,180 @@
 
     } catch (error) {
 
-      console.error(
-        "Fehler beim Laden der Orte:",
-        error
-      );
+      console.error(error);
 
     }
+
+  }
+
+
+  /* ========================================================= */
+  /* ERGEBNISSE EINES ORTES */
+  /* ========================================================= */
+
+  async function loadResult(
+    placeId
+  ) {
+
+    try {
+
+      const response =
+        await fetch(
+          SUPABASE_URL +
+          "/rest/v1/place_results" +
+          "?select=*" +
+          "&place_id=eq." +
+          encodeURIComponent(placeId) +
+          "&order=created_at.desc" +
+          "&limit=1",
+          {
+            headers: {
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " +
+                SUPABASE_KEY
+            }
+          }
+        );
+
+
+      if (!response.ok) {
+
+        return null;
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      if (!data.length) {
+
+        return null;
+
+      }
+
+
+      return data[0];
+
+    } catch (error) {
+
+      console.error(error);
+
+      return null;
+
+    }
+
+  }
+
+
+  /* ========================================================= */
+  /* RAUMBEISPIEL ANZEIGEN */
+  /* ========================================================= */
+
+  async function showPlace(
+    marker,
+    place
+  ) {
+
+    let popup = `
+
+      <div style="min-width:230px">
+
+        <h3 style="margin-top:0">
+          ${text(place.name)}
+        </h3>
+
+        <p>
+          <strong>Land:</strong>
+          ${text(place.country)}
+        </p>
+
+    `;
+
+
+    if (
+      place.climate_zones &&
+      place.climate_zones.name
+    ) {
+
+      popup += `
+
+        <p>
+          <strong>Klimazone:</strong>
+          ${text(
+            place.climate_zones.name
+          )}
+        </p>
+
+      `;
+
+    }
+
+
+    const result =
+      await loadResult(
+        place.id
+      );
+
+
+    if (result) {
+
+      popup += `
+
+        <hr>
+
+        <p>
+          <strong>🌡️ Temperatur:</strong><br>
+          ${text(
+            result.temperature
+          )}
+        </p>
+
+        <p>
+          <strong>🌧️ Niederschlag:</strong><br>
+          ${text(
+            result.precipitation
+          )}
+        </p>
+
+        <p>
+          <strong>🌿 Vegetation:</strong><br>
+          ${text(
+            result.vegetation
+          )}
+        </p>
+
+        <p>
+          <strong>🏘️ Menschliche Nutzung:</strong><br>
+          ${text(
+            result.human_use
+          )}
+        </p>
+
+        <p>
+          <strong>💡 Erkenntnis:</strong><br>
+          ${text(
+            result.findings
+          )}
+        </p>
+
+      `;
+
+    }
+
+
+    popup += `
+      </div>
+    `;
+
+
+    marker
+      .bindPopup(popup)
+      .openPopup();
 
   }
 
@@ -966,65 +1445,73 @@
 
     try {
 
-      const response = await fetch(
-        SUPABASE_URL +
-        "/rest/v1/student_submissions" +
-        "?select=*,climate_zones(name)" +
-        "&status=eq.approved" +
-        "&order=created_at.asc",
-        {
-          headers: {
-            "apikey": SUPABASE_KEY,
-            "Authorization":
-              "Bearer " + SUPABASE_KEY
-          }
-        }
-      );
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("student_submissions")
+          .select(
+            "*, climate_zones(name)"
+          )
+          .eq(
+            "status",
+            "approved"
+          )
+          .order(
+            "created_at",
+            {
+              ascending: true
+            }
+          );
 
 
-      if (!response.ok) {
+      if (error) {
 
-        console.error(
-          "Schülerbeiträge konnten nicht geladen werden:",
-          await response.text()
-        );
+        console.error(error);
 
         return;
 
       }
 
 
-      const submissions =
-        await response.json();
-
-
-      submissions.forEach(
+      data.forEach(
         submission => {
 
           const marker =
-            L.marker(
-              [
-                submission.latitude,
-                submission.longitude
-              ]
-            ).addTo(map);
+            L.marker([
+              submission.latitude,
+              submission.longitude
+            ]).addTo(map);
 
 
           let popup = `
+
             <div style="min-width:230px">
 
-              <div style="font-size:13px;color:#0b5d7a;font-weight:bold">
+              <div
+                style="
+                  font-size:13px;
+                  color:#0b5d7a;
+                  font-weight:bold
+                "
+              >
                 👩‍🎓 Schülerbeitrag
               </div>
 
               <h3 style="margin-top:5px">
-                ${text(submission.name)}
+                ${text(
+                  submission.name
+                )}
               </h3>
 
               <p>
                 <strong>Land:</strong>
-                ${text(submission.country)}
+                ${text(
+                  submission.country
+                )}
               </p>
+
           `;
 
 
@@ -1034,84 +1521,122 @@
           ) {
 
             popup += `
+
               <p>
                 <strong>Klimazone:</strong>
                 ${text(
                   submission.climate_zones.name
                 )}
               </p>
+
             `;
 
           }
 
 
-          if (submission.temperature) {
+          if (
+            submission.temperature
+          ) {
 
             popup += `
+
               <p>
                 <strong>🌡️ Temperatur:</strong><br>
-                ${text(submission.temperature)}
+                ${text(
+                  submission.temperature
+                )}
               </p>
+
             `;
 
           }
 
 
-          if (submission.precipitation) {
+          if (
+            submission.precipitation
+          ) {
 
             popup += `
+
               <p>
                 <strong>🌧️ Niederschlag:</strong><br>
-                ${text(submission.precipitation)}
+                ${text(
+                  submission.precipitation
+                )}
               </p>
+
             `;
 
           }
 
 
-          if (submission.vegetation) {
+          if (
+            submission.vegetation
+          ) {
 
             popup += `
+
               <p>
                 <strong>🌿 Vegetation:</strong><br>
-                ${text(submission.vegetation)}
+                ${text(
+                  submission.vegetation
+                )}
               </p>
+
             `;
 
           }
 
 
-          if (submission.human_use) {
+          if (
+            submission.human_use
+          ) {
 
             popup += `
+
               <p>
                 <strong>🏘️ Menschliche Nutzung:</strong><br>
-                ${text(submission.human_use)}
+                ${text(
+                  submission.human_use
+                )}
               </p>
+
             `;
 
           }
 
 
-          if (submission.findings) {
+          if (
+            submission.findings
+          ) {
 
             popup += `
+
               <p>
                 <strong>💡 Erkenntnis:</strong><br>
-                ${text(submission.findings)}
+                ${text(
+                  submission.findings
+                )}
               </p>
+
             `;
 
           }
 
 
-          if (submission.source) {
+          if (
+            submission.source
+          ) {
 
             popup += `
+
               <p>
                 <strong>🔗 Quelle:</strong><br>
-                ${text(submission.source)}
+                ${text(
+                  submission.source
+                )}
               </p>
+
             `;
 
           }
@@ -1122,7 +1647,9 @@
           `;
 
 
-          marker.bindPopup(popup);
+          marker.bindPopup(
+            popup
+          );
 
         }
       );
@@ -1138,14 +1665,15 @@
 
 
   /* ========================================================= */
-  /* SCHÜLERFORMULAR ÖFFNEN */
+  /* SCHÜLERFORMULAR */
   /* ========================================================= */
 
   function openStudentForm() {
 
     document.getElementById(
-      "formModal"
-    ).style.display = "block";
+      "studentModal"
+    ).style.display =
+      "block";
 
   }
 
@@ -1153,8 +1681,9 @@
   function closeStudentForm() {
 
     document.getElementById(
-      "formModal"
-    ).style.display = "none";
+      "studentModal"
+    ).style.display =
+      "none";
 
     stopLocationSelection();
 
@@ -1162,26 +1691,29 @@
 
 
   /* ========================================================= */
-  /* ORT AUF KARTE AUSWÄHLEN */
+  /* ORT AUSWÄHLEN */
   /* ========================================================= */
 
-  let selectingLocation = false;
+  let selectingLocation =
+    false;
 
 
   function startLocationSelection() {
 
-    selectingLocation = true;
+    selectingLocation =
+      true;
 
 
     document.getElementById(
       "locationStatus"
     ).innerHTML =
-      "📍 Bitte jetzt auf der Karte auf den gewünschten Ort klicken.";
+      "📍 Jetzt auf der Karte auf den gewünschten Ort klicken.";
 
 
     document.getElementById(
-      "formModal"
-    ).style.display = "none";
+      "studentModal"
+    ).style.display =
+      "none";
 
 
     map.getContainer().style.cursor =
@@ -1192,7 +1724,9 @@
 
   function stopLocationSelection() {
 
-    selectingLocation = false;
+    selectingLocation =
+      false;
+
 
     map.getContainer().style.cursor =
       "";
@@ -1205,12 +1739,15 @@
     function(event) {
 
       if (!selectingLocation) {
+
         return;
+
       }
 
 
       const latitude =
         event.latlng.lat.toFixed(4);
+
 
       const longitude =
         event.latlng.lng.toFixed(4);
@@ -1218,12 +1755,14 @@
 
       document.getElementById(
         "latitude"
-      ).value = latitude;
+      ).value =
+        latitude;
 
 
       document.getElementById(
         "longitude"
-      ).value = longitude;
+      ).value =
+        longitude;
 
 
       document.getElementById(
@@ -1240,8 +1779,9 @@
 
 
       document.getElementById(
-        "formModal"
-      ).style.display = "block";
+        "studentModal"
+      ).style.display =
+        "block";
 
     }
   );
@@ -1252,24 +1792,14 @@
   /* ========================================================= */
 
   document
-    .getElementById("studentForm")
+    .getElementById(
+      "studentForm"
+    )
     .addEventListener(
       "submit",
       async function(event) {
 
         event.preventDefault();
-
-
-        const name =
-          document.getElementById(
-            "name"
-          ).value.trim();
-
-
-        const country =
-          document.getElementById(
-            "country"
-          ).value.trim();
 
 
         const latitude =
@@ -1282,48 +1812,6 @@
           document.getElementById(
             "longitude"
           ).value;
-
-
-        const climateZoneId =
-          document.getElementById(
-            "climateZone"
-          ).value;
-
-
-        const temperature =
-          document.getElementById(
-            "temperature"
-          ).value.trim();
-
-
-        const precipitation =
-          document.getElementById(
-            "precipitation"
-          ).value.trim();
-
-
-        const vegetation =
-          document.getElementById(
-            "vegetation"
-          ).value.trim();
-
-
-        const humanUse =
-          document.getElementById(
-            "humanUse"
-          ).value.trim();
-
-
-        const findings =
-          document.getElementById(
-            "findings"
-          ).value.trim();
-
-
-        const source =
-          document.getElementById(
-            "source"
-          ).value.trim();
 
 
         if (
@@ -1342,9 +1830,21 @@
 
         const submission = {
 
-          name: name,
+          name:
+            document
+              .getElementById(
+                "name"
+              )
+              .value
+              .trim(),
 
-          country: country,
+          country:
+            document
+              .getElementById(
+                "country"
+              )
+              .value
+              .trim(),
 
           latitude:
             Number(latitude),
@@ -1353,25 +1853,61 @@
             Number(longitude),
 
           climate_zone_id:
-            Number(climateZoneId),
+            Number(
+              document
+                .getElementById(
+                  "climateZone"
+                )
+                .value
+            ),
 
           temperature:
-            temperature,
+            document
+              .getElementById(
+                "temperature"
+              )
+              .value
+              .trim(),
 
           precipitation:
-            precipitation,
+            document
+              .getElementById(
+                "precipitation"
+              )
+              .value
+              .trim(),
 
           vegetation:
-            vegetation,
+            document
+              .getElementById(
+                "vegetation"
+              )
+              .value
+              .trim(),
 
           human_use:
-            humanUse,
+            document
+              .getElementById(
+                "humanUse"
+              )
+              .value
+              .trim(),
 
           findings:
-            findings,
+            document
+              .getElementById(
+                "findings"
+              )
+              .value
+              .trim(),
 
           source:
-            source,
+            document
+              .getElementById(
+                "source"
+              )
+              .value
+              .trim(),
 
           status:
             "pending"
@@ -1381,48 +1917,25 @@
 
         try {
 
-          const response =
-            await fetch(
-              SUPABASE_URL +
-              "/rest/v1/student_submissions",
-              {
-                method: "POST",
-
-                headers: {
-                  "apikey":
-                    SUPABASE_KEY,
-
-                  "Authorization":
-                    "Bearer " +
-                    SUPABASE_KEY,
-
-                  "Content-Type":
-                    "application/json",
-
-                  "Prefer":
-                    "return=minimal"
-                },
-
-                body:
-                  JSON.stringify(
-                    submission
-                  )
-              }
-            );
+          const {
+            error
+          } =
+            await supabaseClient
+              .from(
+                "student_submissions"
+              )
+              .insert(
+                submission
+              );
 
 
-          if (!response.ok) {
+          if (error) {
 
-            const errorText =
-              await response.text();
-
-            console.error(
-              errorText
-            );
+            console.error(error);
 
             alert(
-              "Der Beitrag konnte leider nicht gespeichert werden.\n\n" +
-              errorText
+              "Der Beitrag konnte nicht gespeichert werden:\n\n" +
+              error.message
             );
 
             return;
@@ -1432,7 +1945,7 @@
 
           alert(
             "✅ Danke!\n\n" +
-            "Der Beitrag wurde erfolgreich eingereicht und wartet jetzt auf die Freigabe durch die Lehrkraft."
+            "Der Beitrag wurde eingereicht und wartet jetzt auf die Freigabe."
           );
 
 
@@ -1474,6 +1987,489 @@
 
       }
     );
+
+
+  /* ========================================================= */
+  /* LEHRER LOGIN */
+  /* ========================================================= */
+
+  async function openTeacherArea() {
+
+    const {
+      data: {
+        session
+      }
+    } =
+      await supabaseClient
+        .auth
+        .getSession();
+
+
+    if (session) {
+
+      await showTeacherArea();
+
+    } else {
+
+      document.getElementById(
+        "teacherLoginModal"
+      ).style.display =
+        "block";
+
+    }
+
+  }
+
+
+  function closeTeacherLogin() {
+
+    document.getElementById(
+      "teacherLoginModal"
+    ).style.display =
+      "none";
+
+  }
+
+
+  document
+    .getElementById(
+      "loginForm"
+    )
+    .addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
+
+
+        const email =
+          document.getElementById(
+            "teacherEmail"
+          ).value;
+
+
+        const password =
+          document.getElementById(
+            "teacherPassword"
+          ).value;
+
+
+        const errorBox =
+          document.getElementById(
+            "loginError"
+          );
+
+
+        errorBox.style.display =
+          "none";
+
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .auth
+            .signInWithPassword({
+              email: email,
+              password: password
+            });
+
+
+        if (error) {
+
+          errorBox.textContent =
+            "Anmeldung fehlgeschlagen. Bitte E-Mail und Passwort prüfen.";
+
+          errorBox.style.display =
+            "block";
+
+          return;
+
+        }
+
+
+        closeTeacherLogin();
+
+
+        await showTeacherArea();
+
+      }
+    );
+
+
+  /* ========================================================= */
+  /* LEHRERBEREICH ÖFFNEN */
+  /* ========================================================= */
+
+  async function showTeacherArea() {
+
+    document.getElementById(
+      "teacherModal"
+    ).style.display =
+      "block";
+
+
+    await loadPendingSubmissions();
+
+  }
+
+
+  function closeTeacherArea() {
+
+    document.getElementById(
+      "teacherModal"
+    ).style.display =
+      "none";
+
+  }
+
+
+  /* ========================================================= */
+  /* AUSSTEHENDE BEITRÄGE LADEN */
+  /* ========================================================= */
+
+  async function loadPendingSubmissions() {
+
+    const list =
+      document.getElementById(
+        "submissionList"
+      );
+
+
+    list.innerHTML =
+      "Beiträge werden geladen ...";
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(
+          "student_submissions"
+        )
+        .select(
+          "*, climate_zones(name)"
+        )
+        .eq(
+          "status",
+          "pending"
+        )
+        .order(
+          "created_at",
+          {
+            ascending: true
+          }
+        );
+
+
+    if (error) {
+
+      console.error(error);
+
+      list.innerHTML = `
+        <div class="submission-card">
+          Fehler beim Laden der Beiträge:
+          ${text(error.message)}
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    if (!data.length) {
+
+      list.innerHTML = `
+
+        <div class="empty-message">
+
+          🎉 Zurzeit gibt es keine
+          offenen Beiträge.
+
+          <br><br>
+
+          Alle eingereichten Beiträge
+          wurden bereits bearbeitet.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    data.forEach(
+      submission => {
+
+        const card =
+          document.createElement(
+            "div"
+          );
+
+
+        card.className =
+          "submission-card";
+
+
+        card.innerHTML = `
+
+          <span class="status-pending">
+            WARTET AUF FREIGABE
+          </span>
+
+          <h3>
+            ${text(
+              submission.name
+            )}
+          </h3>
+
+          <p>
+            <strong>Land:</strong>
+            ${text(
+              submission.country
+            )}
+          </p>
+
+          <p>
+            <strong>Position:</strong>
+            ${text(
+              submission.latitude
+            )},
+            ${text(
+              submission.longitude
+            )}
+          </p>
+
+          <p>
+            <strong>Klimazone:</strong>
+            ${
+              submission.climate_zones
+              ? text(
+                  submission
+                    .climate_zones
+                    .name
+                )
+              : ""
+            }
+          </p>
+
+          <p>
+            <strong>🌡️ Temperatur:</strong><br>
+            ${text(
+              submission.temperature
+            )}
+          </p>
+
+          <p>
+            <strong>🌧️ Niederschlag:</strong><br>
+            ${text(
+              submission.precipitation
+            )}
+          </p>
+
+          <p>
+            <strong>🌿 Vegetation:</strong><br>
+            ${text(
+              submission.vegetation
+            )}
+          </p>
+
+          <p>
+            <strong>🏘️ Menschliche Nutzung:</strong><br>
+            ${text(
+              submission.human_use
+            )}
+          </p>
+
+          <p>
+            <strong>💡 Erkenntnis:</strong><br>
+            ${text(
+              submission.findings
+            )}
+          </p>
+
+          <p>
+            <strong>🔗 Quelle:</strong><br>
+            ${text(
+              submission.source
+            )}
+          </p>
+
+          <div class="submission-actions">
+
+            <button
+              class="approve-button"
+              onclick="approveSubmission(${submission.id})"
+            >
+              ✅ Freigeben
+            </button>
+
+            <button
+              class="reject-button"
+              onclick="rejectSubmission(${submission.id})"
+            >
+              ❌ Ablehnen
+            </button>
+
+          </div>
+
+        `;
+
+
+        list.appendChild(
+          card
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================================= */
+  /* BEITRAG FREIGEBEN */
+  /* ========================================================= */
+
+  async function approveSubmission(
+    id
+  ) {
+
+    const confirmed =
+      confirm(
+        "Diesen Beitrag wirklich auf der Klimakarte veröffentlichen?"
+      );
+
+
+    if (!confirmed) {
+
+      return;
+
+    }
+
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(
+          "student_submissions"
+        )
+        .update({
+          status:
+            "approved"
+        })
+        .eq(
+          "id",
+          id
+        );
+
+
+    if (error) {
+
+      alert(
+        "Der Beitrag konnte nicht freigegeben werden:\n\n" +
+        error.message
+      );
+
+      return;
+
+    }
+
+
+    await loadPendingSubmissions();
+
+
+    alert(
+      "✅ Beitrag wurde freigegeben."
+    );
+
+
+    location.reload();
+
+  }
+
+
+  /* ========================================================= */
+  /* BEITRAG ABLEHNEN */
+  /* ========================================================= */
+
+  async function rejectSubmission(
+    id
+  ) {
+
+    const confirmed =
+      confirm(
+        "Diesen Beitrag wirklich ablehnen?"
+      );
+
+
+    if (!confirmed) {
+
+      return;
+
+    }
+
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(
+          "student_submissions"
+        )
+        .update({
+          status:
+            "rejected"
+        })
+        .eq(
+          "id",
+          id
+        );
+
+
+    if (error) {
+
+      alert(
+        "Der Beitrag konnte nicht abgelehnt werden:\n\n" +
+        error.message
+      );
+
+      return;
+
+    }
+
+
+    await loadPendingSubmissions();
+
+
+    alert(
+      "Der Beitrag wurde abgelehnt."
+    );
+
+  }
+
+
+  /* ========================================================= */
+  /* ABMELDEN */
+  /* ========================================================= */
+
+  async function teacherLogout() {
+
+    await supabaseClient
+      .auth
+      .signOut();
+
+
+    closeTeacherArea();
+
+  }
 
 
   /* ========================================================= */
