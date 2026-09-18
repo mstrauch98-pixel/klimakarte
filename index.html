@@ -106,6 +106,12 @@
       font-weight: bold;
     }
 
+    .delete-button {
+      background: #7a1f1f;
+      color: white;
+      font-weight: bold;
+    }
+
     .logout-button {
       background: #ddd;
       color: #222;
@@ -484,13 +490,9 @@
       <strong>So geht's:</strong><br>
 
       1. Ort eingeben.<br>
-
       2. Auf „Ort auf Karte auswählen“ klicken.<br>
-
       3. Auf der Karte den Ort anklicken.<br>
-
       4. Untersuchungsergebnisse eintragen.<br>
-
       5. Beitrag absenden.
 
     </div>
@@ -948,76 +950,19 @@
   }
 
 
-  addZone(
-    "Polarzone",
-    66.5,
-    90,
-    "#8ecae6"
-  );
+  addZone("Polarzone", 66.5, 90, "#8ecae6");
+  addZone("Polarzone", -90, -66.5, "#8ecae6");
 
+  addZone("Subpolarzone", 55, 66.5, "#90be6d");
+  addZone("Subpolarzone", -66.5, -55, "#90be6d");
 
-  addZone(
-    "Polarzone",
-    -90,
-    -66.5,
-    "#8ecae6"
-  );
+  addZone("Gemäßigte Zone", 40, 55, "#f9c74f");
+  addZone("Gemäßigte Zone", -55, -40, "#f9c74f");
 
+  addZone("Subtropen", 23.5, 40, "#f9844a");
+  addZone("Subtropen", -40, -23.5, "#f9844a");
 
-  addZone(
-    "Subpolarzone",
-    55,
-    66.5,
-    "#90be6d"
-  );
-
-
-  addZone(
-    "Subpolarzone",
-    -66.5,
-    -55,
-    "#90be6d"
-  );
-
-
-  addZone(
-    "Gemäßigte Zone",
-    40,
-    55,
-    "#f9c74f"
-  );
-
-
-  addZone(
-    "Gemäßigte Zone",
-    -55,
-    -40,
-    "#f9c74f"
-  );
-
-
-  addZone(
-    "Subtropen",
-    23.5,
-    40,
-    "#f9844a"
-  );
-
-
-  addZone(
-    "Subtropen",
-    -40,
-    -23.5,
-    "#f9844a"
-  );
-
-
-  addZone(
-    "Tropen",
-    -23.5,
-    23.5,
-    "#90be6d"
-  );
+  addZone("Tropen", -23.5, 23.5, "#90be6d");
 
 
   /* ========================================================= */
@@ -2318,6 +2263,13 @@
               ❌ Ablehnen
             </button>
 
+            <button
+              class="delete-button"
+              onclick="deleteSubmission(${submission.id})"
+            >
+              🗑️ Löschen
+            </button>
+
           </div>
 
         `;
@@ -2451,6 +2403,66 @@
 
     alert(
       "Der Beitrag wurde abgelehnt."
+    );
+
+  }
+
+
+  /* ========================================================= */
+  /* BEITRAG LÖSCHEN */
+  /* ========================================================= */
+
+  async function deleteSubmission(
+    id
+  ) {
+
+    const confirmed =
+      confirm(
+        "⚠️ Diesen Beitrag wirklich endgültig löschen?\n\n" +
+        "Der Beitrag wird vollständig aus der Datenbank entfernt und kann nicht wiederhergestellt werden."
+      );
+
+
+    if (!confirmed) {
+
+      return;
+
+    }
+
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(
+          "student_submissions"
+        )
+        .delete()
+        .eq(
+          "id",
+          id
+        );
+
+
+    if (error) {
+
+      console.error(error);
+
+      alert(
+        "Der Beitrag konnte nicht gelöscht werden:\n\n" +
+        error.message
+      );
+
+      return;
+
+    }
+
+
+    await loadPendingSubmissions();
+
+
+    alert(
+      "🗑️ Der Beitrag wurde endgültig gelöscht."
     );
 
   }
