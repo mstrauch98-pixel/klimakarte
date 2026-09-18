@@ -10,7 +10,7 @@
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+  >
 
   <style>
     * {
@@ -39,10 +39,15 @@
       width: 100%;
     }
 
+    .popup {
+      min-width: 250px;
+      max-width: 330px;
+    }
+
     .popup-title {
       font-size: 20px;
       font-weight: bold;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .popup-country {
@@ -50,228 +55,295 @@
       margin-bottom: 12px;
     }
 
-    .popup-section {
-      margin-top: 8px;
+    .popup-zone {
+      background: #e8f1f7;
+      padding: 7px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .data-row {
+      margin: 9px 0;
       line-height: 1.4;
     }
 
-    .popup-label {
+    .data-label {
       font-weight: bold;
+    }
+
+    .no-data {
+      color: #777;
+      font-style: italic;
     }
   </style>
 </head>
 
 <body>
 
-  <header>
-    <h1>🌍 Unsere Klimakarte</h1>
-    <div>Raumbeispiele unserer Unterrichtseinheit</div>
-  </header>
+<header>
+  <h1>🌍 Unsere Klimakarte</h1>
+  <div>Raumbeispiele unserer Unterrichtseinheit</div>
+</header>
 
-  <div id="map"></div>
+<div id="map"></div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <script>
+<script>
 
-    // --------------------------------------------------
-    // SUPABASE
-    // --------------------------------------------------
+  // ==================================================
+  // SUPABASE
+  // ==================================================
 
-    const SUPABASE_URL =
-      "https://wtfwbelrlorgggcyyztj.supabase.co";
+  const SUPABASE_URL =
+    "https://wtfwbelrlorgggcyyztj.supabase.co";
 
-    const SUPABASE_KEY =
-      "sb_publishable_uSIbU0bHTGfcTDqoDuSiAQ_VwdT8R9o";
+  const SUPABASE_KEY =
+    "sb_publishable_uSIbU0bHTGfcTDqoDuSiAQ_VwdT8R9o";
 
 
-    // --------------------------------------------------
-    // KARTE
-    // --------------------------------------------------
+  // ==================================================
+  // KARTE
+  // ==================================================
 
-    const map = L.map("map").setView([10, 0], 2);
+  const map = L.map("map").setView([10, 0], 2);
 
-    L.tileLayer(
-      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      attribution: "&copy; OpenStreetMap-Mitwirkende"
+    }
+  ).addTo(map);
+
+
+  // ==================================================
+  // HILFSFUNKTION
+  // ==================================================
+
+  function text(wert) {
+
+    if (
+      wert === null ||
+      wert === undefined ||
+      wert === ""
+    ) {
+      return '<span class="no-data">Noch keine Angaben</span>';
+    }
+
+    return String(wert);
+  }
+
+
+  // ==================================================
+  // KLIMADATEN FÜR EINEN ORT LADEN
+  // ==================================================
+
+  async function loadResult(placeId) {
+
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/place_results?select=*&place_id=eq." +
+      placeId +
+      "&order=created_at.desc&limit=1",
       {
-        attribution: "&copy; OpenStreetMap-Mitwirkende"
+        headers: {
+          "apikey": SUPABASE_KEY
+        }
       }
-    ).addTo(map);
+    );
+
+    if (!response.ok) {
+
+      console.error(
+        "Fehler beim Laden der Klimadaten:",
+        await response.text()
+      );
+
+      return null;
+    }
+
+    const results = await response.json();
+
+    if (results.length === 0) {
+      return null;
+    }
+
+    return results[0];
+  }
 
 
-    // --------------------------------------------------
-    // HILFSFUNKTION
-    // --------------------------------------------------
+  // ==================================================
+  // POPUP
+  // ==================================================
 
-    function sichererText(wert) {
-      if (wert === null || wert === undefined || wert === "") {
-        return "Noch keine Angaben";
-      }
+  async function openPlacePopup(marker, place) {
 
-      return String(wert);
+    marker.bindPopup(
+      "<div class='popup'>Klimadaten werden geladen …</div>"
+    ).openPopup();
+
+
+    const result =
+      await loadResult(place.id);
+
+
+    const climateZone =
+      place.climate_zones
+        ? place.climate_zones.name
+        : null;
+
+
+    let popup = `
+
+      <div class="popup">
+
+        <div class="popup-title">
+          ${text(place.name)}
+        </div>
+
+        <div class="popup-country">
+          ${text(place.country)}
+        </div>
+
+        <div class="popup-zone">
+          🌍 <strong>Klimazone:</strong><br>
+          ${text(climateZone)}
+        </div>
+
+    `;
+
+
+    if (result) {
+
+      popup += `
+
+        <div class="data-row">
+          <span class="data-label">🌡️ Temperatur:</span><br>
+          ${text(result.temperature)}
+        </div>
+
+        <div class="data-row">
+          <span class="data-label">🌧️ Niederschlag:</span><br>
+          ${text(result.precipitation)}
+        </div>
+
+        <div class="data-row">
+          <span class="data-label">🌿 Vegetation:</span><br>
+          ${text(result.vegetation)}
+        </div>
+
+        <div class="data-row">
+          <span class="data-label">🏘️ Menschliche Nutzung:</span><br>
+          ${text(result.human_use)}
+        </div>
+
+        <div class="data-row">
+          <span class="data-label">💡 Erkenntnisse:</span><br>
+          ${text(result.findings)}
+        </div>
+
+      `;
+
+    } else {
+
+      popup += `
+
+        <div class="data-row">
+          <span class="no-data">
+            Für dieses Raumbeispiel wurden noch
+            keine Untersuchungsergebnisse eingetragen.
+          </span>
+        </div>
+
+      `;
+
     }
 
 
-    // --------------------------------------------------
-    // ORTE AUS SUPABASE LADEN
-    // --------------------------------------------------
+    popup += "</div>";
 
-    async function loadPlaces() {
 
-      console.log("1. Verbindung zu Supabase wird hergestellt...");
+    marker.setPopupContent(popup);
+  }
 
-      const response = await fetch(
-        SUPABASE_URL +
-        "/rest/v1/places?select=*,climate_zones(name)",
-        {
-          headers: {
-            "apikey": SUPABASE_KEY
-          }
+
+  // ==================================================
+  // ORTE AUS SUPABASE LADEN
+  // ==================================================
+
+  async function loadPlaces() {
+
+    console.log("Lade Raumbeispiele …");
+
+
+    const response = await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/places" +
+      "?select=*,climate_zones(name)",
+
+      {
+        headers: {
+          "apikey": SUPABASE_KEY
         }
-      );
-
-      console.log(
-        "2. Antwort von Supabase:",
-        response.status
-      );
-
-
-      const text = await response.text();
-
-      console.log(
-        "3. Daten:",
-        text
-      );
-
-
-      if (!response.ok) {
-
-        alert(
-          "Supabase-Fehler: " + text
-        );
-
-        return;
       }
 
+    );
 
-      const places = JSON.parse(text);
 
+    if (!response.ok) {
 
-      console.log(
-        "4. Gefundene Orte:",
-        places
+      const error =
+        await response.text();
+
+      alert(
+        "Supabase-Fehler: " + error
       );
 
-
-      // ------------------------------------------------
-      // JEDEN ORT AUF DER KARTE DARSTELLEN
-      // ------------------------------------------------
-
-      places.forEach(place => {
-
-        const climateZone =
-          place.climate_zones
-            ? place.climate_zones.name
-            : "Noch keine Klimazone";
+      return;
+    }
 
 
-        // Marker erzeugen
+    const places =
+      await response.json();
 
-        const marker = L.marker([
+
+    console.log(
+      "Gefundene Orte:",
+      places
+    );
+
+
+    // ================================================
+    // MARKER ERSTELLEN
+    // ================================================
+
+    places.forEach(place => {
+
+      const marker =
+        L.marker([
           place.latitude,
           place.longitude
         ]).addTo(map);
 
 
-        // Popup-Inhalt
+      marker.on(
+        "click",
+        () => openPlacePopup(marker, place)
+      );
 
-        const popup = `
+    });
 
-          <div>
-
-            <div class="popup-title">
-              ${sichererText(place.name)}
-            </div>
-
-            <div class="popup-country">
-              ${sichererText(place.country)}
-            </div>
+  }
 
 
-            <div class="popup-section">
-              <span class="popup-label">
-                Klimazone:
-              </span><br>
-              ${sichererText(climateZone)}
-            </div>
+  // ==================================================
+  // START
+  // ==================================================
 
+  loadPlaces();
 
-            <div class="popup-section">
-              <span class="popup-label">
-                Beschreibung:
-              </span><br>
-              ${sichererText(place.description)}
-            </div>
-
-
-            <div class="popup-section">
-              <span class="popup-label">
-                🌡️ Temperatur:
-              </span><br>
-              Noch keine Angaben
-            </div>
-
-
-            <div class="popup-section">
-              <span class="popup-label">
-                🌧️ Niederschlag:
-              </span><br>
-              Noch keine Angaben
-            </div>
-
-
-            <div class="popup-section">
-              <span class="popup-label">
-                🌿 Vegetation:
-              </span><br>
-              Noch keine Angaben
-            </div>
-
-
-            <div class="popup-section">
-              <span class="popup-label">
-                🏘️ Menschliche Nutzung:
-              </span><br>
-              Noch keine Angaben
-            </div>
-
-
-            <div class="popup-section">
-              <span class="popup-label">
-                💡 Erkenntnisse:
-              </span><br>
-              Noch keine Angaben
-            </div>
-
-          </div>
-
-        `;
-
-
-        marker.bindPopup(popup);
-
-      });
-
-    }
-
-
-    // --------------------------------------------------
-    // START
-    // --------------------------------------------------
-
-    loadPlaces();
-
-  </script>
+</script>
 
 </body>
 </html>
