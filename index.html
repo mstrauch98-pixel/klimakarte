@@ -845,9 +845,41 @@
     </div>
 
 
+    <h3 style="color:#0b5d7a;">
+      🟡 Offene Beiträge
+    </h3>
+
+
     <div id="submissionList">
 
       Beiträge werden geladen ...
+
+    </div>
+
+
+    <hr
+      style="
+        margin:30px 0;
+        border:0;
+        border-top:1px solid #ddd;
+      "
+    >
+
+
+    <h3 style="color:#0b5d7a;">
+      🟢 Bereits veröffentlichte Beiträge
+    </h3>
+
+
+    <p>
+      Diese Beiträge sind aktuell auf der Klimakarte sichtbar.
+      Du kannst sie hier wieder von der Klimakarte entfernen.
+    </p>
+
+
+    <div id="approvedSubmissionList">
+
+      Veröffentlichte Beiträge werden geladen ...
 
     </div>
 
@@ -2056,6 +2088,8 @@
 
     await loadPendingSubmissions();
 
+    await loadApprovedTeacherSubmissions();
+
   }
 
 
@@ -2263,13 +2297,6 @@
               ❌ Ablehnen
             </button>
 
-            <button
-              class="delete-button"
-              onclick="deleteSubmission(${submission.id})"
-            >
-              🗑️ Löschen
-            </button>
-
           </div>
 
         `;
@@ -2409,17 +2436,260 @@
 
 
   /* ========================================================= */
-  /* BEITRAG LÖSCHEN */
+  /* VERÖFFENTLICHTE BEITRÄGE FÜR LEHRER LADEN */
   /* ========================================================= */
 
-  async function deleteSubmission(
+  async function loadApprovedTeacherSubmissions() {
+
+    const list =
+      document.getElementById(
+        "approvedSubmissionList"
+      );
+
+
+    list.innerHTML =
+      "Veröffentlichte Beiträge werden geladen ...";
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(
+          "student_submissions"
+        )
+        .select(
+          "*, climate_zones(name)"
+        )
+        .eq(
+          "status",
+          "approved"
+        )
+        .order(
+          "created_at",
+          {
+            ascending: true
+          }
+        );
+
+
+    if (error) {
+
+      console.error(error);
+
+      list.innerHTML = `
+        <div class="submission-card">
+
+          Fehler beim Laden der
+          veröffentlichten Beiträge:
+
+          ${text(error.message)}
+
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    if (!data.length) {
+
+      list.innerHTML = `
+
+        <div class="empty-message">
+
+          Auf der Klimakarte sind derzeit
+          keine Schülerbeiträge veröffentlicht.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    data.forEach(
+      submission => {
+
+        const card =
+          document.createElement(
+            "div"
+          );
+
+
+        card.className =
+          "submission-card";
+
+
+        card.innerHTML = `
+
+          <div
+            style="
+              display:inline-block;
+              background:#d1e7dd;
+              color:#0f5132;
+              padding:4px 8px;
+              border-radius:5px;
+              font-size:13px;
+              font-weight:bold;
+            "
+          >
+            🟢 VERÖFFENTLICHT
+          </div>
+
+
+          <h3>
+            ${text(
+              submission.name
+            )}
+          </h3>
+
+
+          <p>
+            <strong>Land:</strong>
+            ${text(
+              submission.country
+            )}
+          </p>
+
+
+          <p>
+            <strong>Position:</strong>
+            ${text(
+              submission.latitude
+            )},
+            ${text(
+              submission.longitude
+            )}
+          </p>
+
+
+          <p>
+            <strong>Klimazone:</strong>
+            ${
+              submission.climate_zones
+              ? text(
+                  submission
+                    .climate_zones
+                    .name
+                )
+              : ""
+            }
+          </p>
+
+
+          <p>
+            <strong>🌡️ Temperatur:</strong><br>
+            ${text(
+              submission.temperature
+            )}
+          </p>
+
+
+          <p>
+            <strong>🌧️ Niederschlag:</strong><br>
+            ${text(
+              submission.precipitation
+            )}
+          </p>
+
+
+          <p>
+            <strong>🌿 Vegetation:</strong><br>
+            ${text(
+              submission.vegetation
+            )}
+          </p>
+
+
+          <p>
+            <strong>🏘️ Menschliche Nutzung:</strong><br>
+            ${text(
+              submission.human_use
+            )}
+          </p>
+
+
+          <p>
+            <strong>💡 Erkenntnis:</strong><br>
+            ${text(
+              submission.findings
+            )}
+          </p>
+
+
+          <p>
+            <strong>🔗 Quelle:</strong><br>
+            ${text(
+              submission.source
+            )}
+          </p>
+
+
+          <div class="submission-actions">
+
+            <button
+              class="delete-button"
+              onclick="deleteApprovedSubmission(${submission.id})"
+            >
+              🗑️ Von der Klimakarte entfernen
+            </button>
+
+          </div>
+
+        `;
+
+
+        list.appendChild(
+          card
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================================= */
+  /* VERÖFFENTLICHTEN BEITRAG ENTFERNEN */
+  /* ========================================================= */
+
+  async function deleteApprovedSubmission(
     id
   ) {
 
+    const {
+      data: {
+        session
+      }
+    } =
+      await supabaseClient
+        .auth
+        .getSession();
+
+
+    if (!session) {
+
+      alert(
+        "Bitte zuerst als Lehrkraft anmelden."
+      );
+
+      return;
+
+    }
+
+
     const confirmed =
       confirm(
-        "⚠️ Diesen Beitrag wirklich endgültig löschen?\n\n" +
-        "Der Beitrag wird vollständig aus der Datenbank entfernt und kann nicht wiederhergestellt werden."
+        "Diesen veröffentlichten Beitrag wirklich von der Klimakarte entfernen?\n\n" +
+        "Der Beitrag wird vollständig aus der Datenbank entfernt."
       );
 
 
@@ -2431,6 +2701,7 @@
 
 
     const {
+      data,
       error
     } =
       await supabaseClient
@@ -2441,6 +2712,13 @@
         .eq(
           "id",
           id
+        )
+        .eq(
+          "status",
+          "approved"
+        )
+        .select(
+          "id"
         );
 
 
@@ -2449,7 +2727,7 @@
       console.error(error);
 
       alert(
-        "Der Beitrag konnte nicht gelöscht werden:\n\n" +
+        "Der Beitrag konnte nicht entfernt werden:\n\n" +
         error.message
       );
 
@@ -2458,12 +2736,31 @@
     }
 
 
-    await loadPendingSubmissions();
+    if (
+      !data ||
+      !data.length
+    ) {
+
+      alert(
+        "Der Beitrag wurde nicht gefunden oder ist nicht mehr veröffentlicht."
+      );
+
+      await loadApprovedTeacherSubmissions();
+
+      return;
+
+    }
 
 
     alert(
-      "🗑️ Der Beitrag wurde endgültig gelöscht."
+      "🗑️ Der Beitrag wurde von der Klimakarte entfernt."
     );
+
+
+    await loadApprovedTeacherSubmissions();
+
+
+    location.reload();
 
   }
 
