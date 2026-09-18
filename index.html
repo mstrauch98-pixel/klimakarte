@@ -11,45 +11,27 @@
   />
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f5f7fa;
-      color: #17202a;
     }
 
     header {
-      padding: 18px;
+      padding: 16px;
       background: #16324f;
       color: white;
     }
 
-    header h1 {
-      margin: 0 0 6px;
+    h1 {
+      margin: 0 0 5px;
       font-size: 24px;
     }
 
-    header p {
-      margin: 0;
-      opacity: 0.9;
-    }
-
     #map {
-      height: calc(100vh - 92px);
+      height: calc(100vh - 82px);
       width: 100%;
-    }
-
-    .info-box {
-      padding: 10px;
-      line-height: 1.5;
-    }
-
-    .info-box h2 {
-      margin-top: 0;
     }
   </style>
 </head>
@@ -58,7 +40,7 @@
 
 <header>
   <h1>🌍 Unsere Klimakarte</h1>
-  <p>Raumbeispiele und Klimazonen unserer Unterrichtseinheit</p>
+  <div>Raumbeispiele unserer Unterrichtseinheit</div>
 </header>
 
 <div id="map"></div>
@@ -66,74 +48,51 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-  // Weltkarte
-  const map = L.map('map').setView([10, 0], 2);
+const SUPABASE_URL =
+  "https://wtfwbelrlorgggcyyztj.supabase.co";
 
-  L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+const SUPABASE_KEY =
+  "DEIN_PUBLISHABLE_KEY";
+
+const map = L.map("map").setView([10, 0], 2);
+
+L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    attribution: "&copy; OpenStreetMap-Mitwirkende"
+  }
+).addTo(map);
+
+async function loadPlaces() {
+  const response = await fetch(
+    SUPABASE_URL + "/rest/v1/places?select=*",
     {
-      attribution: '&copy; OpenStreetMap-Mitwirkende'
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + SUPABASE_KEY
+      }
     }
-  ).addTo(map);
+  );
 
-  // Klimazonen – zunächst vereinfacht dargestellt
-  const zones = [
-    {
-      name: "Tropen",
-      color: "#2e8b57",
-      bounds: [[23.5, -180], [-23.5, 180]]
-    },
-    {
-      name: "Subtropen",
-      color: "#e6b84a",
-      bounds: [[35, -180], [23.5, 180]]
-    },
-    {
-      name: "Gemäßigte Zone",
-      color: "#75aadb",
-      bounds: [[60, -180], [35, 180]]
-    }
-  ];
+  if (!response.ok) {
+    console.error("Fehler beim Laden der Orte:", await response.text());
+    return;
+  }
 
-  zones.forEach(zone => {
-    L.rectangle(zone.bounds, {
-      color: zone.color,
-      weight: 1,
-      fillColor: zone.color,
-      fillOpacity: 0.12
-    })
-    .bindPopup(
-      `<div class="info-box">
-        <h2>${zone.name}</h2>
-        <p>Klimazone unserer Unterrichtseinheit.</p>
-      </div>`
-    )
-    .addTo(map);
+  const places = await response.json();
+
+  places.forEach(place => {
+    L.marker([place.latitude, place.longitude])
+      .addTo(map)
+      .bindPopup(`
+        <h2>${place.name}</h2>
+        <strong>${place.country || ""}</strong>
+        <p>${place.description || ""}</p>
+      `);
   });
+}
 
-  // Golfito
-  L.marker([8.6390, -83.1660])
-    .addTo(map)
-    .bindPopup(`
-      <div class="info-box">
-        <h2>🌴 Golfito</h2>
-        <strong>Costa Rica</strong>
-        <p>Klimazone: Tropen</p>
-        <p>Raumbeispiel unserer Unterrichtseinheit.</p>
-      </div>
-    `);
-
-  // Belém
-  L.marker([-1.4558, -48.4902])
-    .addTo(map)
-    .bindPopup(`
-      <div class="info-box">
-        <h2>🌿 Belém</h2>
-        <strong>Brasilien</strong>
-        <p>Klimazone: Tropen</p>
-        <p>Raumbeispiel unserer Unterrichtseinheit.</p>
-      </div>
-    `);
+loadPlaces();
 </script>
 
 </body>
