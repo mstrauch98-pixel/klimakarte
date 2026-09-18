@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -19,6 +20,7 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
+      background: #f4f7f9;
     }
 
     header {
@@ -36,104 +38,241 @@
       height: calc(100vh - 82px);
       width: 100%;
     }
+
+    .popup-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .popup-country {
+      color: #555;
+      margin-bottom: 12px;
+    }
+
+    .popup-section {
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    .popup-label {
+      font-weight: bold;
+    }
   </style>
 </head>
 
 <body>
 
-<header>
-  <h1>🌍 Unsere Klimakarte</h1>
-  <div>Raumbeispiele unserer Unterrichtseinheit</div>
-</header>
+  <header>
+    <h1>🌍 Unsere Klimakarte</h1>
+    <div>Raumbeispiele unserer Unterrichtseinheit</div>
+  </header>
 
-<div id="map"></div>
+  <div id="map"></div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<script>
+  <script>
 
-const SUPABASE_URL =
-  "https://wtfwbelrlorgggcyyztj.supabase.co";
+    // --------------------------------------------------
+    // SUPABASE
+    // --------------------------------------------------
 
-const SUPABASE_KEY =
-  "sb_publishable_uSIbU0bHTGfcTDqoDuSiAQ_VwdT8R9o";
+    const SUPABASE_URL =
+      "https://wtfwbelrlorgggcyyztj.supabase.co";
 
-
-const map = L.map("map").setView([10, 0], 2);
-
-
-L.tileLayer(
-  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  {
-    attribution: "&copy; OpenStreetMap-Mitwirkende"
-  }
-).addTo(map);
+    const SUPABASE_KEY =
+      "sb_publishable_uSIbU0bHTGfcTDqoDuSiAQ_VwdT8R9o";
 
 
-async function loadPlaces() {
+    // --------------------------------------------------
+    // KARTE
+    // --------------------------------------------------
 
-  console.log("1. Verbindung wird getestet...");
+    const map = L.map("map").setView([10, 0], 2);
 
-  const response = await fetch(
-    SUPABASE_URL +
-    "/rest/v1/places?select=name,country,latitude,longitude",
-    {
-      headers: {
-        "apikey": SUPABASE_KEY
+    L.tileLayer(
+      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+        attribution: "&copy; OpenStreetMap-Mitwirkende"
       }
+    ).addTo(map);
+
+
+    // --------------------------------------------------
+    // HILFSFUNKTION
+    // --------------------------------------------------
+
+    function sichererText(wert) {
+      if (wert === null || wert === undefined || wert === "") {
+        return "Noch keine Angaben";
+      }
+
+      return String(wert);
     }
-  );
-
-  console.log(
-    "2. Antwort von Supabase:",
-    response.status
-  );
-
-  const text = await response.text();
-
-  console.log(
-    "3. Daten:",
-    text
-  );
 
 
-  if (!response.ok) {
+    // --------------------------------------------------
+    // ORTE AUS SUPABASE LADEN
+    // --------------------------------------------------
 
-    alert(
-      "Supabase-Fehler: " + text
-    );
+    async function loadPlaces() {
 
-    return;
-  }
+      console.log("1. Verbindung zu Supabase wird hergestellt...");
 
+      const response = await fetch(
+        SUPABASE_URL +
+        "/rest/v1/places?select=*,climate_zones(name)",
+        {
+          headers: {
+            "apikey": SUPABASE_KEY
+          }
+        }
+      );
 
-  const places = JSON.parse(text);
-
-
-  places.forEach(place => {
-
-    L.marker([
-      place.latitude,
-      place.longitude
-    ])
-
-    .addTo(map)
-
-    .bindPopup(
-      "<strong>" +
-      place.name +
-      "</strong><br>" +
-      (place.country || "")
-    );
-
-  });
-
-}
+      console.log(
+        "2. Antwort von Supabase:",
+        response.status
+      );
 
 
-loadPlaces();
+      const text = await response.text();
 
-</script>
+      console.log(
+        "3. Daten:",
+        text
+      );
+
+
+      if (!response.ok) {
+
+        alert(
+          "Supabase-Fehler: " + text
+        );
+
+        return;
+      }
+
+
+      const places = JSON.parse(text);
+
+
+      console.log(
+        "4. Gefundene Orte:",
+        places
+      );
+
+
+      // ------------------------------------------------
+      // JEDEN ORT AUF DER KARTE DARSTELLEN
+      // ------------------------------------------------
+
+      places.forEach(place => {
+
+        const climateZone =
+          place.climate_zones
+            ? place.climate_zones.name
+            : "Noch keine Klimazone";
+
+
+        // Marker erzeugen
+
+        const marker = L.marker([
+          place.latitude,
+          place.longitude
+        ]).addTo(map);
+
+
+        // Popup-Inhalt
+
+        const popup = `
+
+          <div>
+
+            <div class="popup-title">
+              ${sichererText(place.name)}
+            </div>
+
+            <div class="popup-country">
+              ${sichererText(place.country)}
+            </div>
+
+
+            <div class="popup-section">
+              <span class="popup-label">
+                Klimazone:
+              </span><br>
+              ${sichererText(climateZone)}
+            </div>
+
+
+            <div class="popup-section">
+              <span class="popup-label">
+                Beschreibung:
+              </span><br>
+              ${sichererText(place.description)}
+            </div>
+
+
+            <div class="popup-section">
+              <span class="popup-label">
+                🌡️ Temperatur:
+              </span><br>
+              Noch keine Angaben
+            </div>
+
+
+            <div class="popup-section">
+              <span class="popup-label">
+                🌧️ Niederschlag:
+              </span><br>
+              Noch keine Angaben
+            </div>
+
+
+            <div class="popup-section">
+              <span class="popup-label">
+                🌿 Vegetation:
+              </span><br>
+              Noch keine Angaben
+            </div>
+
+
+            <div class="popup-section">
+              <span class="popup-label">
+                🏘️ Menschliche Nutzung:
+              </span><br>
+              Noch keine Angaben
+            </div>
+
+
+            <div class="popup-section">
+              <span class="popup-label">
+                💡 Erkenntnisse:
+              </span><br>
+              Noch keine Angaben
+            </div>
+
+          </div>
+
+        `;
+
+
+        marker.bindPopup(popup);
+
+      });
+
+    }
+
+
+    // --------------------------------------------------
+    // START
+    // --------------------------------------------------
+
+    loadPlaces();
+
+  </script>
 
 </body>
 </html>
+```
