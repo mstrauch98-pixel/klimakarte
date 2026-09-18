@@ -1,10 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>EF Erdkunde (Stch) Unsere Klimakarte</title>
+  <title>Unsere Klimakarte</title>
 
   <link
     rel="stylesheet"
@@ -36,6 +37,33 @@
     #map {
       height: calc(100vh - 82px);
       width: 100%;
+    }
+
+    .legend {
+      background: white;
+      padding: 10px 12px;
+      border-radius: 8px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .legend-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .legend-color {
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+      border: 1px solid #999;
     }
 
     .popup {
@@ -80,7 +108,7 @@
 <body>
 
 <header>
-  <h1>EF Erdkunde (Stch) 🌍 Unsere Klimakarte</h1>
+  <h1>🌍 Unsere Klimakarte</h1>
   <div>Raumbeispiele unserer Unterrichtseinheit</div>
 </header>
 
@@ -116,6 +144,198 @@
 
 
   // ==================================================
+  // KLIMAGÜRTEL
+  // ==================================================
+
+  const klimaZonen = [
+
+    {
+      name: "Polarzone",
+      south: 66.5,
+      north: 90,
+      color: "#d9edf7"
+    },
+
+    {
+      name: "Subpolarzone",
+      south: 55,
+      north: 66.5,
+      color: "#b9d7ea"
+    },
+
+    {
+      name: "Gemäßigte Zone",
+      south: 40,
+      north: 55,
+      color: "#a8d5ba"
+    },
+
+    {
+      name: "Subtropen",
+      south: 23.5,
+      north: 40,
+      color: "#f6d186"
+    },
+
+    {
+      name: "Tropen",
+      south: -23.5,
+      north: 23.5,
+      color: "#f4a261"
+    }
+
+  ];
+
+
+  klimaZonen.forEach(zone => {
+
+    L.rectangle(
+      [
+        [zone.south, -180],
+        [zone.north, 180]
+      ],
+      {
+        color: zone.color,
+        fillColor: zone.color,
+        fillOpacity: 0.18,
+        weight: 1
+      }
+    )
+    .addTo(map)
+    .bindTooltip(zone.name);
+
+  });
+
+
+  // Südhalbkugel
+
+  const suedZonen = [
+
+    {
+      name: "Subtropen",
+      south: -40,
+      north: -23.5,
+      color: "#f6d186"
+    },
+
+    {
+      name: "Gemäßigte Zone",
+      south: -55,
+      north: -40,
+      color: "#a8d5ba"
+    },
+
+    {
+      name: "Subpolarzone",
+      south: -66.5,
+      north: -55,
+      color: "#b9d7ea"
+    },
+
+    {
+      name: "Polarzone",
+      south: -90,
+      north: -66.5,
+      color: "#d9edf7"
+    }
+
+  ];
+
+
+  suedZonen.forEach(zone => {
+
+    L.rectangle(
+      [
+        [zone.south, -180],
+        [zone.north, 180]
+      ],
+      {
+        color: zone.color,
+        fillColor: zone.color,
+        fillOpacity: 0.18,
+        weight: 1
+      }
+    )
+    .addTo(map)
+    .bindTooltip(zone.name);
+
+  });
+
+
+  // ==================================================
+  // LEGENDE
+  // ==================================================
+
+  const legend = L.control({
+    position: "bottomright"
+  });
+
+
+  legend.onAdd = function () {
+
+    const div =
+      L.DomUtil.create(
+        "div",
+        "legend"
+      );
+
+
+    div.innerHTML = `
+      <div class="legend-title">
+        Klimagürtel
+      </div>
+
+      <div class="legend-item">
+        <span
+          class="legend-color"
+          style="background:#d9edf7">
+        </span>
+        Polarzone
+      </div>
+
+      <div class="legend-item">
+        <span
+          class="legend-color"
+          style="background:#b9d7ea">
+        </span>
+        Subpolarzone
+      </div>
+
+      <div class="legend-item">
+        <span
+          class="legend-color"
+          style="background:#a8d5ba">
+        </span>
+        Gemäßigte Zone
+      </div>
+
+      <div class="legend-item">
+        <span
+          class="legend-color"
+          style="background:#f6d186">
+        </span>
+        Subtropen
+      </div>
+
+      <div class="legend-item">
+        <span
+          class="legend-color"
+          style="background:#f4a261">
+        </span>
+        Tropen
+      </div>
+    `;
+
+
+    return div;
+
+  };
+
+
+  legend.addTo(map);
+
+
+  // ==================================================
   // HILFSFUNKTION
   // ==================================================
 
@@ -133,217 +353,5 @@
   }
 
 
-  // ==================================================
-  // KLIMADATEN FÜR EINEN ORT LADEN
-  // ==================================================
-
-  async function loadResult(placeId) {
-
-    const response = await fetch(
-      SUPABASE_URL +
-      "/rest/v1/place_results?select=*&place_id=eq." +
-      placeId +
-      "&order=created_at.desc&limit=1",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY
-        }
-      }
-    );
-
-    if (!response.ok) {
-
-      console.error(
-        "Fehler beim Laden der Klimadaten:",
-        await response.text()
-      );
-
-      return null;
-    }
-
-    const results = await response.json();
-
-    if (results.length === 0) {
-      return null;
-    }
-
-    return results[0];
-  }
-
-
-  // ==================================================
-  // POPUP
-  // ==================================================
-
-  async function openPlacePopup(marker, place) {
-
-    marker.bindPopup(
-      "<div class='popup'>Klimadaten werden geladen …</div>"
-    ).openPopup();
-
-
-    const result =
-      await loadResult(place.id);
-
-
-    const climateZone =
-      place.climate_zones
-        ? place.climate_zones.name
-        : null;
-
-
-    let popup = `
-
-      <div class="popup">
-
-        <div class="popup-title">
-          ${text(place.name)}
-        </div>
-
-        <div class="popup-country">
-          ${text(place.country)}
-        </div>
-
-        <div class="popup-zone">
-          🌍 <strong>Klimazone:</strong><br>
-          ${text(climateZone)}
-        </div>
-
-    `;
-
-
-    if (result) {
-
-      popup += `
-
-        <div class="data-row">
-          <span class="data-label">🌡️ Temperatur:</span><br>
-          ${text(result.temperature)}
-        </div>
-
-        <div class="data-row">
-          <span class="data-label">🌧️ Niederschlag:</span><br>
-          ${text(result.precipitation)}
-        </div>
-
-        <div class="data-row">
-          <span class="data-label">🌿 Vegetation:</span><br>
-          ${text(result.vegetation)}
-        </div>
-
-        <div class="data-row">
-          <span class="data-label">🏘️ Menschliche Nutzung:</span><br>
-          ${text(result.human_use)}
-        </div>
-
-        <div class="data-row">
-          <span class="data-label">💡 Erkenntnisse:</span><br>
-          ${text(result.findings)}
-        </div>
-
-      `;
-
-    } else {
-
-      popup += `
-
-        <div class="data-row">
-          <span class="no-data">
-            Für dieses Raumbeispiel wurden noch
-            keine Untersuchungsergebnisse eingetragen.
-          </span>
-        </div>
-
-      `;
-
-    }
-
-
-    popup += "</div>";
-
-
-    marker.setPopupContent(popup);
-  }
-
-
-  // ==================================================
-  // ORTE AUS SUPABASE LADEN
-  // ==================================================
-
-  async function loadPlaces() {
-
-    console.log("Lade Raumbeispiele …");
-
-
-    const response = await fetch(
-
-      SUPABASE_URL +
-      "/rest/v1/places" +
-      "?select=*,climate_zones(name)",
-
-      {
-        headers: {
-          "apikey": SUPABASE_KEY
-        }
-      }
-
-    );
-
-
-    if (!response.ok) {
-
-      const error =
-        await response.text();
-
-      alert(
-        "Supabase-Fehler: " + error
-      );
-
-      return;
-    }
-
-
-    const places =
-      await response.json();
-
-
-    console.log(
-      "Gefundene Orte:",
-      places
-    );
-
-
-    // ================================================
-    // MARKER ERSTELLEN
-    // ================================================
-
-    places.forEach(place => {
-
-      const marker =
-        L.marker([
-          place.latitude,
-          place.longitude
-        ]).addTo(map);
-
-
-      marker.on(
-        "click",
-        () => openPlacePopup(marker, place)
-      );
-
-    });
-
-  }
-
-
-  // ==================================================
-  // START
-  // ==================================================
-
-  loadPlaces();
-
-</script>
-
-</body>
-</html>
+  // ======================
 ```
