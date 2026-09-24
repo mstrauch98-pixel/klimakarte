@@ -83,6 +83,33 @@
       font-weight: bold;
     }
 
+    .filter-button {
+      background: #e9f7ef;
+      color: #146c43;
+      font-weight: bold;
+    }
+
+    .map-data-label {
+      background: white;
+      border: 1px solid #0b5d7a;
+      border-radius: 7px;
+      padding: 4px 7px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+      font-size: 12px;
+      font-weight: bold;
+      white-space: normal;
+      max-width: 190px;
+      text-align: center;
+    }
+
+    .filter-summary {
+      background: #eef7fa;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
     .teacher-button {
       background: white;
       color: #0b5d7a;
@@ -543,6 +570,14 @@
 
 
     <button
+      class="filter-button"
+      onclick="openFilterModal()"
+    >
+      🔎 Karte filtern
+    </button>
+
+
+    <button
       class="teacher-button"
       onclick="openTeacherArea()"
     >
@@ -559,6 +594,58 @@
 <!-- ========================================================= -->
 
 <div id="map"></div>
+
+
+<!-- ========================================================= -->
+<!-- FILTER -->
+<!-- ========================================================= -->
+
+<div id="filterModal" class="modal">
+  <div class="box">
+    <h2>🔎 Karte filtern</h2>
+
+    <div class="form-intro">
+      Wähle aus, welche Orte sichtbar sein sollen und welche Information direkt auf der Weltkarte angezeigt wird.
+    </div>
+
+    <div class="form-group">
+      <label for="filterClimateZone">🌍 Klimazone</label>
+      <select id="filterClimateZone">
+        <option value="all">Alle Klimazonen</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="filterPlaceType">🗂️ Ortstyp</label>
+      <select id="filterPlaceType">
+        <option value="all">Alle Orte</option>
+        <option value="place">📍 Nur Raumbeispiele</option>
+        <option value="student">👩‍🎓 Nur Schülerbeiträge</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="filterDataDisplay">👁️ Direkt auf der Karte anzeigen</label>
+      <select id="filterDataDisplay">
+        <option value="none">Nur Ortsmarker</option>
+        <option value="temperature">🌡️ Temperatur</option>
+        <option value="precipitation">🌧️ Niederschlag</option>
+        <option value="vegetation">🌿 Vegetation</option>
+        <option value="human_use">🏘️ Menschliche Nutzung</option>
+      </select>
+    </div>
+
+    <div id="filterSummary" class="filter-summary">
+      Aktuell werden alle Orte angezeigt.
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="close-button" onclick="closeFilterModal()">Schließen</button>
+      <button type="button" class="close-button" onclick="resetMapFilters()">↩️ Zurücksetzen</button>
+      <button type="button" class="submit-button" onclick="applyMapFilters()">✅ Filter anwenden</button>
+    </div>
+  </div>
+</div>
 
 
 <!-- ========================================================= -->
@@ -1152,6 +1239,10 @@
   ).addTo(map);
 
 
+  /* Alle Kartenorte für Filter und Datenanzeige */
+  const mapItems = [];
+
+
   /* ========================================================= */
   /* KLIMAGÜRTEL */
   /* ========================================================= */
@@ -1364,6 +1455,18 @@
 
       });
 
+      const filterSelect =
+        document.getElementById("filterClimateZone");
+
+      if (filterSelect) {
+        data.forEach(zone => {
+          const filterOption = document.createElement("option");
+          filterOption.value = zone.name;
+          filterOption.textContent = zone.name;
+          filterSelect.appendChild(filterOption);
+        });
+      }
+
 
     } catch (error) {
 
@@ -1431,6 +1534,21 @@
             place.latitude,
             place.longitude
           ]).addTo(map);
+
+        const mapItem = {
+          type: "place",
+          marker: marker,
+          name: place.name,
+          climateZone: place.climate_zones ? place.climate_zones.name : "",
+          data: null
+        };
+
+        mapItems.push(mapItem);
+
+        loadResult(place.id).then(result => {
+          mapItem.data = result;
+          refreshMapItem(mapItem);
+        });
 
 
         marker.on(
@@ -2342,6 +2460,21 @@
               submission.longitude
             ]).addTo(map);
 
+          const mapItem = {
+            type: "student",
+            marker: marker,
+            name: submission.name,
+            climateZone: submission.climate_zones ? submission.climate_zones.name : "",
+            data: {
+              temperature: submission.temperature,
+              precipitation: submission.precipitation,
+              vegetation: submission.vegetation,
+              human_use: submission.human_use
+            }
+          };
+
+          mapItems.push(mapItem);
+
 
           let popup = `
 
@@ -2519,6 +2652,132 @@
 
     }
 
+  }
+
+
+  /* ========================================================= */
+  /* KARTENFILTER UND DATENANZEIGE */
+  /* ========================================================= */
+
+  let activeMapFilters = {
+    climateZone: "all",
+    placeType: "all",
+    dataDisplay: "none"
+  };
+
+  function openFilterModal() {
+    document.getElementById("filterClimateZone").value = activeMapFilters.climateZone;
+    document.getElementById("filterPlaceType").value = activeMapFilters.placeType;
+    document.getElementById("filterDataDisplay").value = activeMapFilters.dataDisplay;
+    document.getElementById("filterModal").style.display = "block";
+  }
+
+  function closeFilterModal() {
+    document.getElementById("filterModal").style.display = "none";
+  }
+
+  function shortMapText(value) {
+    if (value === null || value === undefined || String(value).trim() === "") {
+      return "Keine Daten";
+    }
+    const valueText = String(value).trim();
+    return valueText.length > 80 ? valueText.slice(0, 77) + "…" : valueText;
+  }
+
+  function getMapLabel(item) {
+    if (activeMapFilters.dataDisplay === "none") return "";
+
+    const data = item.data || {};
+    const icons = {
+      temperature: "🌡️",
+      precipitation: "🌧️",
+      vegetation: "🌿",
+      human_use: "🏘️"
+    };
+
+    return (
+      "<strong>" + escapeHtml(item.name) + "</strong><br>" +
+      icons[activeMapFilters.dataDisplay] + " " +
+      escapeHtml(shortMapText(data[activeMapFilters.dataDisplay]))
+    );
+  }
+
+  function refreshMapItem(item) {
+    const zoneMatches =
+      activeMapFilters.climateZone === "all" ||
+      item.climateZone === activeMapFilters.climateZone;
+
+    const typeMatches =
+      activeMapFilters.placeType === "all" ||
+      item.type === activeMapFilters.placeType;
+
+    const shouldShow = zoneMatches && typeMatches;
+
+    if (shouldShow) {
+      if (!map.hasLayer(item.marker)) item.marker.addTo(map);
+
+      if (activeMapFilters.dataDisplay !== "none") {
+        item.marker.bindTooltip(getMapLabel(item), {
+          permanent: true,
+          direction: "top",
+          offset: [0, -8],
+          className: "map-data-label",
+          opacity: 0.95
+        });
+      } else {
+        item.marker.unbindTooltip();
+      }
+    } else {
+      item.marker.unbindTooltip();
+      if (map.hasLayer(item.marker)) map.removeLayer(item.marker);
+    }
+  }
+
+  function updateFilterSummary() {
+    const visibleCount = mapItems.filter(item => {
+      const zoneMatches = activeMapFilters.climateZone === "all" || item.climateZone === activeMapFilters.climateZone;
+      const typeMatches = activeMapFilters.placeType === "all" || item.type === activeMapFilters.placeType;
+      return zoneMatches && typeMatches;
+    }).length;
+
+    const displayNames = {
+      none: "keine Zusatzdaten",
+      temperature: "Temperatur",
+      precipitation: "Niederschlag",
+      vegetation: "Vegetation",
+      human_use: "menschliche Nutzung"
+    };
+
+    document.getElementById("filterSummary").textContent =
+      "Sichtbare Orte: " + visibleCount +
+      " · Kartenanzeige: " + displayNames[activeMapFilters.dataDisplay];
+  }
+
+  function applyMapFilters() {
+    activeMapFilters = {
+      climateZone: document.getElementById("filterClimateZone").value,
+      placeType: document.getElementById("filterPlaceType").value,
+      dataDisplay: document.getElementById("filterDataDisplay").value
+    };
+
+    mapItems.forEach(refreshMapItem);
+    updateFilterSummary();
+    closeFilterModal();
+  }
+
+  function resetMapFilters() {
+    activeMapFilters = {
+      climateZone: "all",
+      placeType: "all",
+      dataDisplay: "none"
+    };
+
+    document.getElementById("filterClimateZone").value = "all";
+    document.getElementById("filterPlaceType").value = "all";
+    document.getElementById("filterDataDisplay").value = "none";
+
+    mapItems.forEach(refreshMapItem);
+    updateFilterSummary();
   }
 
 
