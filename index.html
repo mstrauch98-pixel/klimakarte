@@ -616,15 +616,6 @@
     </div>
 
     <div class="form-group">
-      <label for="filterPlaceType">🗂️ Ortstyp</label>
-      <select id="filterPlaceType">
-        <option value="all">Alle Orte</option>
-        <option value="place">📍 Nur Raumbeispiele</option>
-        <option value="student">👩‍🎓 Nur Schülerbeiträge</option>
-      </select>
-    </div>
-
-    <div class="form-group">
       <label for="filterDataDisplay">👁️ Direkt auf der Karte anzeigen</label>
       <select id="filterDataDisplay">
         <option value="none">Nur Ortsmarker</option>
@@ -1119,9 +1110,7 @@
 
     <div class="teacher-intro">
 
-      Hier erscheinen die Beiträge,
-      die von Schülerinnen und Schülern
-      eingereicht wurden.
+      Hier erscheinen neue Orte, die eingereicht wurden.
 
       <br><br>
 
@@ -1161,7 +1150,7 @@
 
 
     <p>
-      Diese Beiträge sind aktuell auf der Klimakarte sichtbar.
+      Diese Orte sind aktuell auf der Klimakarte sichtbar.
       Du kannst sie hier wieder von der Klimakarte entfernen.
     </p>
 
@@ -1188,6 +1177,36 @@
 
 </div>
 
+
+<!-- ========================================================= -->
+<!-- ORT BEARBEITEN -->
+<!-- ========================================================= -->
+
+<div id="editPlaceModal" class="modal">
+  <div class="box">
+    <h2>✏️ Ort bearbeiten</h2>
+    <form id="editPlaceForm">
+      <input id="editPlaceId" type="hidden">
+      <div class="form-group"><label for="editName">Ort *</label><input id="editName" required></div>
+      <div class="form-group"><label for="editCountry">Land</label><input id="editCountry"></div>
+      <div class="compare-selects">
+        <div class="form-group"><label for="editLatitude">Breitengrad</label><input id="editLatitude" type="number" step="any" required></div>
+        <div class="form-group"><label for="editLongitude">Längengrad</label><input id="editLongitude" type="number" step="any" required></div>
+      </div>
+      <div class="form-group"><label for="editClimateZone">Klimazone *</label><select id="editClimateZone" required><option value="">Bitte auswählen</option></select></div>
+      <div class="form-group"><label for="editTemperature">🌡️ Temperatur</label><input id="editTemperature"></div>
+      <div class="form-group"><label for="editPrecipitation">🌧️ Niederschlag</label><input id="editPrecipitation"></div>
+      <div class="form-group"><label for="editVegetation">🌿 Vegetation</label><textarea id="editVegetation"></textarea></div>
+      <div class="form-group"><label for="editHumanUse">🏘️ Menschliche Nutzung</label><textarea id="editHumanUse"></textarea></div>
+      <div class="form-group"><label for="editFindings">💡 Erkenntnis zum Ort</label><textarea id="editFindings"></textarea></div>
+      <div class="form-group"><label for="editSource">🔗 Quelle</label><input id="editSource"></div>
+      <div class="form-actions">
+        <button type="button" class="close-button" onclick="closeEditPlace()">Abbrechen</button>
+        <button type="submit" class="submit-button">💾 Änderungen speichern</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <!-- ========================================================= -->
 <!-- LIBRARIES -->
@@ -1452,6 +1471,14 @@
         select.appendChild(
           option
         );
+
+        const editSelect = document.getElementById("editClimateZone");
+        if (editSelect) {
+          const editOption = document.createElement("option");
+          editOption.value = zone.id;
+          editOption.textContent = zone.name;
+          editSelect.appendChild(editOption);
+        }
 
       });
 
@@ -1779,38 +1806,17 @@
 
   function getComparisonItems() {
 
-    const fixedPlaces =
-      allPlaces.map(place => ({
-        key: "place:" + place.id,
-        type: "place",
-        typeLabel: "📍 Raumbeispiel",
-        id: place.id,
-        name: place.name,
-        country: place.country,
-        latitude: place.latitude,
-        climate_zones: place.climate_zones,
-        original: place
-      }));
-
-
-    const studentPlaces =
-      allApprovedSubmissions.map(submission => ({
-        key: "student:" + submission.id,
-        type: "student",
-        typeLabel: "👩‍🎓 Schülerbeitrag",
-        id: submission.id,
-        name: submission.name,
-        country: submission.country,
-        latitude: submission.latitude,
-        climate_zones: submission.climate_zones,
-        original: submission
-      }));
-
-
-    return [
-      ...fixedPlaces,
-      ...studentPlaces
-    ];
+    return allApprovedSubmissions.map(submission => ({
+      key: "student:" + submission.id,
+      type: "student",
+      typeLabel: "Ort",
+      id: submission.id,
+      name: submission.name,
+      country: submission.country,
+      latitude: submission.latitude,
+      climate_zones: submission.climate_zones,
+      original: submission
+    }));
 
   }
 
@@ -1867,8 +1873,6 @@
     items.forEach(item => {
 
       const label =
-        item.typeLabel +
-        ": " +
         item.name +
         (
           item.country
@@ -2155,23 +2159,6 @@
 
 
           <tbody>
-
-            <tr>
-
-              <td>
-                <strong>🗂️ Art</strong>
-              </td>
-
-              <td>
-                ${text(place1.typeLabel)}
-              </td>
-
-              <td>
-                ${text(place2.typeLabel)}
-              </td>
-
-            </tr>
-
 
             <tr>
 
@@ -2480,16 +2467,6 @@
 
             <div style="min-width:230px">
 
-              <div
-                style="
-                  font-size:13px;
-                  color:#0b5d7a;
-                  font-weight:bold
-                "
-              >
-                👩‍🎓 Schülerbeitrag
-              </div>
-
               <h3 style="margin-top:5px">
                 ${text(
                   submission.name
@@ -2661,13 +2638,11 @@
 
   let activeMapFilters = {
     climateZone: "all",
-    placeType: "all",
     dataDisplay: "none"
   };
 
   function openFilterModal() {
     document.getElementById("filterClimateZone").value = activeMapFilters.climateZone;
-    document.getElementById("filterPlaceType").value = activeMapFilters.placeType;
     document.getElementById("filterDataDisplay").value = activeMapFilters.dataDisplay;
     document.getElementById("filterModal").style.display = "block";
   }
@@ -2707,11 +2682,7 @@
       activeMapFilters.climateZone === "all" ||
       item.climateZone === activeMapFilters.climateZone;
 
-    const typeMatches =
-      activeMapFilters.placeType === "all" ||
-      item.type === activeMapFilters.placeType;
-
-    const shouldShow = zoneMatches && typeMatches;
+    const shouldShow = zoneMatches;
 
     if (shouldShow) {
       if (!map.hasLayer(item.marker)) item.marker.addTo(map);
@@ -2736,8 +2707,7 @@
   function updateFilterSummary() {
     const visibleCount = mapItems.filter(item => {
       const zoneMatches = activeMapFilters.climateZone === "all" || item.climateZone === activeMapFilters.climateZone;
-      const typeMatches = activeMapFilters.placeType === "all" || item.type === activeMapFilters.placeType;
-      return zoneMatches && typeMatches;
+      return zoneMatches;
     }).length;
 
     const displayNames = {
@@ -2756,7 +2726,6 @@
   function applyMapFilters() {
     activeMapFilters = {
       climateZone: document.getElementById("filterClimateZone").value,
-      placeType: document.getElementById("filterPlaceType").value,
       dataDisplay: document.getElementById("filterDataDisplay").value
     };
 
@@ -2773,7 +2742,6 @@
     };
 
     document.getElementById("filterClimateZone").value = "all";
-    document.getElementById("filterPlaceType").value = "all";
     document.getElementById("filterDataDisplay").value = "none";
 
     mapItems.forEach(refreshMapItem);
@@ -3641,7 +3609,7 @@
         <div class="empty-message">
 
           Auf der Klimakarte sind derzeit
-          keine Schülerbeiträge veröffentlicht.
+          keine Orte veröffentlicht.
 
         </div>
 
@@ -3776,6 +3744,13 @@
           <div class="submission-actions">
 
             <button
+              class="compare-button"
+              onclick="openEditPlace(${submission.id})"
+            >
+              ✏️ Bearbeiten
+            </button>
+
+            <button
               class="delete-button"
               onclick="deleteApprovedSubmission(${submission.id})"
             >
@@ -3795,6 +3770,70 @@
     );
 
   }
+
+
+  /* ========================================================= */
+  /* ORT BEARBEITEN */
+  /* ========================================================= */
+
+  function openEditPlace(id) {
+    const submission = allApprovedSubmissions.find(item => Number(item.id) === Number(id));
+    if (!submission) {
+      alert("Der Ort konnte nicht geladen werden.");
+      return;
+    }
+
+    document.getElementById("editPlaceId").value = submission.id;
+    document.getElementById("editName").value = submission.name || "";
+    document.getElementById("editCountry").value = submission.country || "";
+    document.getElementById("editLatitude").value = submission.latitude ?? "";
+    document.getElementById("editLongitude").value = submission.longitude ?? "";
+    document.getElementById("editClimateZone").value = submission.climate_zone_id || "";
+    document.getElementById("editTemperature").value = submission.temperature || "";
+    document.getElementById("editPrecipitation").value = submission.precipitation || "";
+    document.getElementById("editVegetation").value = submission.vegetation || "";
+    document.getElementById("editHumanUse").value = submission.human_use || "";
+    document.getElementById("editFindings").value = submission.findings || "";
+    document.getElementById("editSource").value = submission.source || "";
+    document.getElementById("editPlaceModal").style.display = "block";
+  }
+
+  function closeEditPlace() {
+    document.getElementById("editPlaceModal").style.display = "none";
+  }
+
+  document.getElementById("editPlaceForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const id = Number(document.getElementById("editPlaceId").value);
+    const changes = {
+      name: document.getElementById("editName").value.trim(),
+      country: document.getElementById("editCountry").value.trim(),
+      latitude: Number(document.getElementById("editLatitude").value),
+      longitude: Number(document.getElementById("editLongitude").value),
+      climate_zone_id: Number(document.getElementById("editClimateZone").value),
+      temperature: document.getElementById("editTemperature").value.trim(),
+      precipitation: document.getElementById("editPrecipitation").value.trim(),
+      vegetation: document.getElementById("editVegetation").value.trim(),
+      human_use: document.getElementById("editHumanUse").value.trim(),
+      findings: document.getElementById("editFindings").value.trim(),
+      source: document.getElementById("editSource").value.trim()
+    };
+
+    const { error } = await supabaseClient
+      .from("student_submissions")
+      .update(changes)
+      .eq("id", id)
+      .eq("status", "approved");
+
+    if (error) {
+      alert("Die Änderungen konnten nicht gespeichert werden:\n\n" + error.message);
+      return;
+    }
+
+    alert("✅ Änderungen gespeichert.");
+    location.reload();
+  });
 
 
   /* ========================================================= */
@@ -3927,8 +3966,7 @@
 
   loadClimateZones();
 
-  loadPlaces();
-
+  /* Alle sichtbaren Orte kommen jetzt aus student_submissions. */
   loadApprovedSubmissions();
 
 </script>
