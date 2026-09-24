@@ -1630,9 +1630,74 @@
   /* ========================================================= */
 
   let allPlaces = [];
+  let allApprovedSubmissions = [];
 
 
-  async function populateCompareSelects() {
+  function formatLatitude(latitude) {
+
+    const value = Number(latitude);
+
+    if (!Number.isFinite(value)) {
+      return "Keine Angabe";
+    }
+
+    if (value === 0) {
+      return "0° (Äquator)";
+    }
+
+    const direction =
+      value > 0 ? "N" : "S";
+
+    return (
+      Math.abs(value)
+        .toFixed(1)
+        .replace(".", ",") +
+      "° " +
+      direction
+    );
+
+  }
+
+
+  function getComparisonItems() {
+
+    const fixedPlaces =
+      allPlaces.map(place => ({
+        key: "place:" + place.id,
+        type: "place",
+        typeLabel: "📍 Raumbeispiel",
+        id: place.id,
+        name: place.name,
+        country: place.country,
+        latitude: place.latitude,
+        climate_zones: place.climate_zones,
+        original: place
+      }));
+
+
+    const studentPlaces =
+      allApprovedSubmissions.map(submission => ({
+        key: "student:" + submission.id,
+        type: "student",
+        typeLabel: "👩‍🎓 Schülerbeitrag",
+        id: submission.id,
+        name: submission.name,
+        country: submission.country,
+        latitude: submission.latitude,
+        climate_zones: submission.climate_zones,
+        original: submission
+      }));
+
+
+    return [
+      ...fixedPlaces,
+      ...studentPlaces
+    ];
+
+  }
+
+
+  function populateCompareSelects() {
 
     const select1 =
       document.getElementById(
@@ -1656,6 +1721,13 @@
     }
 
 
+    const oldValue1 =
+      select1.value;
+
+    const oldValue2 =
+      select2.value;
+
+
     select1.innerHTML = `
       <option value="">
         Bitte auswählen
@@ -1670,21 +1742,33 @@
     `;
 
 
-    allPlaces.forEach(place => {
+    const items =
+      getComparisonItems();
+
+
+    items.forEach(item => {
+
+      const label =
+        item.typeLabel +
+        ": " +
+        item.name +
+        (
+          item.country
+            ? " – " + item.country
+            : ""
+        );
+
 
       const option1 =
         document.createElement(
           "option"
         );
 
-
       option1.value =
-        place.id;
-
+        item.key;
 
       option1.textContent =
-        place.name;
-
+        label;
 
       select1.appendChild(
         option1
@@ -1696,14 +1780,11 @@
           "option"
         );
 
-
       option2.value =
-        place.id;
-
+        item.key;
 
       option2.textContent =
-        place.name;
-
+        label;
 
       select2.appendChild(
         option2
@@ -1711,10 +1792,31 @@
 
     });
 
+
+    if (
+      items.some(
+        item => item.key === oldValue1
+      )
+    ) {
+      select1.value = oldValue1;
+    }
+
+
+    if (
+      items.some(
+        item => item.key === oldValue2
+      )
+    ) {
+      select2.value = oldValue2;
+    }
+
   }
 
 
   function openCompareModal() {
+
+    populateCompareSelects();
+
 
     document.getElementById(
       "compareModal"
@@ -1746,15 +1848,57 @@
   }
 
 
+  async function getComparisonData(item) {
+
+    if (item.type === "student") {
+
+      return {
+        temperature:
+          item.original.temperature,
+        precipitation:
+          item.original.precipitation,
+        vegetation:
+          item.original.vegetation,
+        human_use:
+          item.original.human_use,
+        findings:
+          item.original.findings
+      };
+
+    }
+
+
+    return await loadResult(
+      item.id
+    );
+
+  }
+
+
+  function comparisonValue(value) {
+
+    if (
+      value === null ||
+      value === undefined ||
+      String(value).trim() === ""
+    ) {
+      return "Keine Daten";
+    }
+
+    return text(value);
+
+  }
+
+
   async function runComparison() {
 
-    const place1Id =
+    const place1Key =
       document.getElementById(
         "comparePlace1"
       ).value;
 
 
-    const place2Id =
+    const place2Key =
       document.getElementById(
         "comparePlace2"
       ).value;
@@ -1781,17 +1925,15 @@
 
 
     if (
-      !place1Id ||
-      !place2Id
+      !place1Key ||
+      !place2Key
     ) {
 
       errorBox.textContent =
         "Bitte zwei Orte auswählen.";
 
-
       errorBox.style.display =
         "block";
-
 
       return;
 
@@ -1799,35 +1941,35 @@
 
 
     if (
-      place1Id === place2Id
+      place1Key === place2Key
     ) {
 
       errorBox.textContent =
         "Bitte zwei unterschiedliche Orte auswählen.";
 
-
       errorBox.style.display =
         "block";
-
 
       return;
 
     }
 
 
+    const items =
+      getComparisonItems();
+
+
     const place1 =
-      allPlaces.find(
-        place =>
-          String(place.id) ===
-          String(place1Id)
+      items.find(
+        item =>
+          item.key === place1Key
       );
 
 
     const place2 =
-      allPlaces.find(
-        place =>
-          String(place.id) ===
-          String(place2Id)
+      items.find(
+        item =>
+          item.key === place2Key
       );
 
 
@@ -1839,10 +1981,8 @@
       errorBox.textContent =
         "Die ausgewählten Orte konnten nicht geladen werden.";
 
-
       errorBox.style.display =
         "block";
-
 
       return;
 
@@ -1855,7 +1995,6 @@
       </p>
     `;
 
-
     resultBox.style.display =
       "block";
 
@@ -1865,8 +2004,8 @@
       result2
     ] =
       await Promise.all([
-        loadResult(place1.id),
-        loadResult(place2.id)
+        getComparisonData(place1),
+        getComparisonData(place2)
       ]);
 
 
@@ -1898,6 +2037,57 @@
 
 
           <tbody>
+
+            <tr>
+
+              <td>
+                <strong>🗂️ Art</strong>
+              </td>
+
+              <td>
+                ${text(place1.typeLabel)}
+              </td>
+
+              <td>
+                ${text(place2.typeLabel)}
+              </td>
+
+            </tr>
+
+
+            <tr>
+
+              <td>
+                <strong>🌐 Land</strong>
+              </td>
+
+              <td>
+                ${comparisonValue(place1.country)}
+              </td>
+
+              <td>
+                ${comparisonValue(place2.country)}
+              </td>
+
+            </tr>
+
+
+            <tr>
+
+              <td>
+                <strong>📍 Breitengrad</strong>
+              </td>
+
+              <td>
+                ${text(formatLatitude(place1.latitude))}
+              </td>
+
+              <td>
+                ${text(formatLatitude(place2.latitude))}
+              </td>
+
+            </tr>
+
 
             <tr>
 
@@ -1937,7 +2127,7 @@
               <td>
                 ${
                   result1
-                    ? text(
+                    ? comparisonValue(
                         result1.temperature
                       )
                     : "Keine Daten"
@@ -1947,7 +2137,7 @@
               <td>
                 ${
                   result2
-                    ? text(
+                    ? comparisonValue(
                         result2.temperature
                       )
                     : "Keine Daten"
@@ -1966,7 +2156,7 @@
               <td>
                 ${
                   result1
-                    ? text(
+                    ? comparisonValue(
                         result1.precipitation
                       )
                     : "Keine Daten"
@@ -1976,7 +2166,7 @@
               <td>
                 ${
                   result2
-                    ? text(
+                    ? comparisonValue(
                         result2.precipitation
                       )
                     : "Keine Daten"
@@ -1995,7 +2185,7 @@
               <td>
                 ${
                   result1
-                    ? text(
+                    ? comparisonValue(
                         result1.vegetation
                       )
                     : "Keine Daten"
@@ -2005,7 +2195,7 @@
               <td>
                 ${
                   result2
-                    ? text(
+                    ? comparisonValue(
                         result2.vegetation
                       )
                     : "Keine Daten"
@@ -2024,7 +2214,7 @@
               <td>
                 ${
                   result1
-                    ? text(
+                    ? comparisonValue(
                         result1.human_use
                       )
                     : "Keine Daten"
@@ -2034,8 +2224,37 @@
               <td>
                 ${
                   result2
-                    ? text(
+                    ? comparisonValue(
                         result2.human_use
+                      )
+                    : "Keine Daten"
+                }
+              </td>
+
+            </tr>
+
+
+            <tr>
+
+              <td>
+                <strong>💡 Erkenntnis zum Ort</strong>
+              </td>
+
+              <td>
+                ${
+                  result1
+                    ? comparisonValue(
+                        result1.findings
+                      )
+                    : "Keine Daten"
+                }
+              </td>
+
+              <td>
+                ${
+                  result2
+                    ? comparisonValue(
+                        result2.findings
                       )
                     : "Keine Daten"
                 }
@@ -2103,6 +2322,15 @@
         return;
 
       }
+
+
+      /* Freigegebene Schülerorte für den Vergleich merken */
+      allApprovedSubmissions =
+        data || [];
+
+
+      /* Vergleichsauswahl aktualisieren */
+      populateCompareSelects();
 
 
       data.forEach(
