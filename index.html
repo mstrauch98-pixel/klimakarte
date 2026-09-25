@@ -943,6 +943,25 @@
 
       <div class="form-group">
 
+        <label for="climateDiagram">
+          📊 Klimadiagramm (optional)
+        </label>
+
+        <input
+          id="climateDiagram"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+        >
+
+        <div class="location-status">
+          JPG, PNG oder WebP · maximal 5 MB
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
         <label for="source">
           🔗 Quelle
         </label>
@@ -979,12 +998,11 @@
         <button
           type="submit"
           class="submit-button"
-        >
+                  >
           ✅ Beitrag absenden
         </button>
 
       </div>
-
 
     </form>
 
@@ -1008,20 +1026,16 @@
       👩‍🏫 Lehrerbereich
     </h2>
 
-
     <p>
       Bitte mit deinem Lehreraccount anmelden.
     </p>
-
 
     <div
       id="loginError"
       class="login-error"
     ></div>
 
-
     <form id="loginForm">
-
 
       <div class="form-group">
 
@@ -1037,7 +1051,6 @@
 
       </div>
 
-
       <div class="form-group">
 
         <label for="teacherPassword">
@@ -1052,7 +1065,6 @@
 
       </div>
 
-
       <div class="form-actions">
 
         <button
@@ -1063,7 +1075,6 @@
           Abbrechen
         </button>
 
-
         <button
           type="submit"
           class="submit-button"
@@ -1072,7 +1083,6 @@
         </button>
 
       </div>
-
 
     </form>
 
@@ -1107,7 +1117,6 @@
 
     </div>
 
-
     <div class="teacher-intro">
 
       Hier erscheinen neue Orte, die eingereicht wurden.
@@ -1122,18 +1131,13 @@
 
     </div>
 
-
     <h3 style="color:#0b5d7a;">
       🟡 Offene Beiträge
     </h3>
 
-
     <div id="submissionList">
-
       Beiträge werden geladen ...
-
     </div>
-
 
     <hr
       style="
@@ -1143,24 +1147,18 @@
       "
     >
 
-
     <h3 style="color:#0b5d7a;">
       🟢 Bereits veröffentlichte Beiträge
     </h3>
 
-
     <p>
       Diese Orte sind aktuell auf der Klimakarte sichtbar.
-      Du kannst sie hier wieder von der Klimakarte entfernen.
+      Du kannst sie bearbeiten oder wieder von der Klimakarte entfernen.
     </p>
 
-
     <div id="approvedSubmissionList">
-
       Veröffentlichte Beiträge werden geladen ...
-
     </div>
-
 
     <div class="form-actions">
 
@@ -1182,39 +1180,239 @@
 <!-- ORT BEARBEITEN -->
 <!-- ========================================================= -->
 
-<div id="editPlaceModal" class="modal">
+<div
+  id="editPlaceModal"
+  class="modal"
+>
+
   <div class="box">
-    <h2>✏️ Ort bearbeiten</h2>
+
+    <h2>
+      ✏️ Ort bearbeiten
+    </h2>
+
     <form id="editPlaceForm">
-      <input id="editPlaceId" type="hidden">
-      <div class="form-group"><label for="editName">Ort *</label><input id="editName" required></div>
-      <div class="form-group"><label for="editCountry">Land</label><input id="editCountry"></div>
+
+      <input
+        id="editPlaceId"
+        type="hidden"
+      >
+
+      <input
+        id="editOldDiagramPath"
+        type="hidden"
+      >
+
+      <div class="form-group">
+
+        <label for="editName">
+          Ort *
+        </label>
+
+        <input
+          id="editName"
+          type="text"
+          required
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="editCountry">
+          Land
+        </label>
+
+        <input
+          id="editCountry"
+          type="text"
+        >
+
+      </div>
+
       <div class="compare-selects">
-        <div class="form-group"><label for="editLatitude">Breitengrad</label><input id="editLatitude" type="number" step="any" required></div>
-        <div class="form-group"><label for="editLongitude">Längengrad</label><input id="editLongitude" type="number" step="any" required></div>
+
+        <div class="form-group">
+
+          <label for="editLatitude">
+            Breitengrad
+          </label>
+
+          <input
+            id="editLatitude"
+            type="number"
+            step="any"
+            required
+          >
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="editLongitude">
+            Längengrad
+          </label>
+
+          <input
+            id="editLongitude"
+            type="number"
+            step="any"
+            required
+          >
+
+        </div>
+
       </div>
-      <div class="form-group"><label for="editClimateZone">Klimazone *</label><select id="editClimateZone" required><option value="">Bitte auswählen</option></select></div>
-      <div class="form-group"><label for="editTemperature">🌡️ Temperatur</label><input id="editTemperature"></div>
-      <div class="form-group"><label for="editPrecipitation">🌧️ Niederschlag</label><input id="editPrecipitation"></div>
-      <div class="form-group"><label for="editVegetation">🌿 Vegetation</label><textarea id="editVegetation"></textarea></div>
-      <div class="form-group"><label for="editHumanUse">🏘️ Menschliche Nutzung</label><textarea id="editHumanUse"></textarea></div>
-      <div class="form-group"><label for="editFindings">💡 Erkenntnis zum Ort</label><textarea id="editFindings"></textarea></div>
-      <div class="form-group"><label for="editSource">🔗 Quelle</label><input id="editSource"></div>
+
+      <div class="form-group">
+
+        <label for="editClimateZone">
+          Klimazone *
+        </label>
+
+        <select
+          id="editClimateZone"
+          required
+        >
+
+          <option value="">
+            Bitte auswählen
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="editTemperature">
+          🌡️ Temperatur
+        </label>
+
+        <input
+          id="editTemperature"
+          type="text"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="editPrecipitation">
+          🌧️ Niederschlag
+        </label>
+
+        <input
+          id="editPrecipitation"
+          type="text"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="editVegetation">
+          🌿 Vegetation
+        </label>
+
+        <textarea id="editVegetation"></textarea>
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="editHumanUse">
+          🏘️ Menschliche Nutzung
+        </label>
+
+        <textarea id="editHumanUse"></textarea>
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="editFindings">
+          💡 Erkenntnis zum Ort
+        </label>
+
+        <textarea id="editFindings"></textarea>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          📊 Klimadiagramm
+        </label>
+
+        <div
+          id="editDiagramPreview"
+          style="margin-bottom:10px"
+        ></div>
+
+        <input
+          id="editClimateDiagram"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+        >
+
+        <div class="location-status">
+          Optional: neues Bild auswählen, um das bisherige zu ersetzen.
+          JPG, PNG oder WebP · maximal 5 MB
+        </div>
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="editSource">
+          🔗 Quelle
+        </label>
+
+        <input
+          id="editSource"
+          type="text"
+        >
+
+      </div>
+
       <div class="form-actions">
-        <button type="button" class="close-button" onclick="closeEditPlace()">Abbrechen</button>
-        <button type="submit" class="submit-button">💾 Änderungen speichern</button>
+
+        <button
+          type="button"
+          class="close-button"
+          onclick="closeEditPlace()"
+        >
+          Abbrechen
+        </button>
+
+        <button
+          type="submit"
+          class="submit-button"
+        >
+          💾 Änderungen speichern
+        </button>
+
       </div>
+
     </form>
+
   </div>
+
 </div>
+
 
 <!-- ========================================================= -->
 <!-- LIBRARIES -->
 <!-- ========================================================= -->
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
 
 
 <script>
@@ -1226,16 +1424,200 @@
   const SUPABASE_URL =
     "https://wtfwbelrlorgggcyyztj.supabase.co";
 
-
   const SUPABASE_KEY =
     "sb_publishable_uSIbU0bHTGfcTDqoDuSiAQ_VwdT8R9o";
-
 
   const supabaseClient =
     window.supabase.createClient(
       SUPABASE_URL,
       SUPABASE_KEY
     );
+
+
+  /* ========================================================= */
+  /* KLIMADIAGRAMME */
+  /* ========================================================= */
+
+  function climateDiagramUrl(path) {
+
+    if (!path) {
+      return "";
+    }
+
+    const { data } =
+      supabaseClient.storage
+        .from("climate-diagrams")
+        .getPublicUrl(path);
+
+    return (
+      data &&
+      data.publicUrl
+    )
+      ? data.publicUrl
+      : "";
+
+  }
+
+
+  function validateDiagramFile(file) {
+
+    if (!file) {
+      return true;
+    }
+
+    const allowed = [
+      "image/jpeg",
+      "image/png",
+      "image/webp"
+    ];
+
+    if (!allowed.includes(file.type)) {
+
+      alert(
+        "Bitte nur JPG-, PNG- oder WebP-Bilder hochladen."
+      );
+
+      return false;
+
+    }
+
+    if (
+      file.size >
+      5 * 1024 * 1024
+    ) {
+
+      alert(
+        "Das Klimadiagramm ist größer als 5 MB. Bitte ein kleineres Bild auswählen."
+      );
+
+      return false;
+
+    }
+
+    return true;
+
+  }
+
+
+  async function uploadClimateDiagram(file) {
+
+    if (!file) {
+      return null;
+    }
+
+    const extension =
+      (
+        file.name
+          .split(".")
+          .pop() ||
+        "jpg"
+      ).toLowerCase();
+
+    const safeExtension =
+      [
+        "jpg",
+        "jpeg",
+        "png",
+        "webp"
+      ].includes(extension)
+        ? extension
+        : "jpg";
+
+    const uniqueName =
+      (
+        window.crypto &&
+        crypto.randomUUID
+      )
+        ? crypto.randomUUID()
+        : (
+            Date.now() +
+            "-" +
+            Math.random()
+              .toString(36)
+              .slice(2)
+          );
+
+    const path =
+      "uploads/" +
+      uniqueName +
+      "." +
+      safeExtension;
+
+    const { error } =
+      await supabaseClient.storage
+        .from("climate-diagrams")
+        .upload(
+          path,
+          file,
+          {
+            cacheControl: "3600",
+            upsert: false
+          }
+        );
+
+    if (error) {
+      throw error;
+    }
+
+    return path;
+
+  }
+
+
+  function diagramHtml(
+    path,
+    altText
+  ) {
+
+    const url =
+      climateDiagramUrl(path);
+
+    if (!url) {
+      return "";
+    }
+
+    return `
+
+      <div style="margin-top:14px">
+
+        <strong>
+          📊 Klimadiagramm:
+        </strong>
+
+        <br>
+
+        <a
+          href="${url}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          <img
+            src="${url}"
+            alt="Klimadiagramm ${text(altText || "")}"
+            style="
+              display:block;
+              max-width:100%;
+              max-height:280px;
+              margin-top:8px;
+              border-radius:10px;
+              border:1px solid #d9e2ec;
+              object-fit:contain;
+              background:white;
+            "
+          >
+
+        </a>
+
+        <small>
+          Antippen, um das Bild groß zu öffnen.
+        </small>
+
+      </div>
+
+    `;
+
+  }
 
 
   /* ========================================================= */
@@ -1248,7 +1630,6 @@
       2
     );
 
-
   L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
@@ -1258,8 +1639,16 @@
   ).addTo(map);
 
 
-  /* Alle Kartenorte für Filter und Datenanzeige */
-  const mapItems = [];
+  const placeLayer =
+    L.layerGroup().addTo(map);
+
+  let allApprovedSubmissions = [];
+
+  let currentClimateFilter =
+    "all";
+
+  let currentDataDisplay =
+    "none";
 
 
   /* ========================================================= */
@@ -1280,11 +1669,8 @@
       ],
       {
         color: color,
-
         fillColor: color,
-
         fillOpacity: 0.20,
-
         weight: 1
       }
     )
@@ -1294,19 +1680,72 @@
   }
 
 
-  addZone("Polarzone", 66.5, 90, "#8ecae6");
-  addZone("Polarzone", -90, -66.5, "#8ecae6");
+  addZone(
+    "Polarzone",
+    66.5,
+    90,
+    "#8ecae6"
+  );
 
-  addZone("Subpolarzone", 55, 66.5, "#90be6d");
-  addZone("Subpolarzone", -66.5, -55, "#90be6d");
+  addZone(
+    "Polarzone",
+    -90,
+    -66.5,
+    "#8ecae6"
+  );
 
-  addZone("Gemäßigte Zone", 40, 55, "#f9c74f");
-  addZone("Gemäßigte Zone", -55, -40, "#f9c74f");
 
-  addZone("Subtropen", 23.5, 40, "#f9844a");
-  addZone("Subtropen", -40, -23.5, "#f9844a");
+  addZone(
+    "Subpolare Zone",
+    55,
+    66.5,
+    "#7b8fd1"
+  );
 
-  addZone("Tropen", -23.5, 23.5, "#90be6d");
+  addZone(
+    "Subpolare Zone",
+    -66.5,
+    -55,
+    "#7b8fd1"
+  );
+
+
+  addZone(
+    "Gemäßigte Zone",
+    40,
+    55,
+    "#f9c74f"
+  );
+
+  addZone(
+    "Gemäßigte Zone",
+    -55,
+    -40,
+    "#f9c74f"
+  );
+
+
+  addZone(
+    "Subtropen",
+    23.5,
+    40,
+    "#f9844a"
+  );
+
+  addZone(
+    "Subtropen",
+    -40,
+    -23.5,
+    "#f9844a"
+  );
+
+
+  addZone(
+    "Tropen",
+    -23.5,
+    23.5,
+    "#90be6d"
+  );
 
 
   /* ========================================================= */
@@ -1328,7 +1767,6 @@
           "legend"
         );
 
-
       div.innerHTML = `
 
         <div class="legend-title">
@@ -1346,9 +1784,9 @@
         <div class="legend-row">
           <span
             class="legend-color"
-            style="background:#90be6d"
+            style="background:#7b8fd1"
           ></span>
-          Subpolarzone
+          Subpolare Zone
         </div>
 
         <div class="legend-row">
@@ -1377,7 +1815,6 @@
 
       `;
 
-
       return div;
 
     };
@@ -1387,7 +1824,7 @@
 
 
   /* ========================================================= */
-  /* HILFSFUNKTION */
+  /* HILFSFUNKTIONEN */
   /* ========================================================= */
 
   function escapeHtml(value) {
@@ -1396,11 +1833,8 @@
       value === null ||
       value === undefined
     ) {
-
       return "";
-
     }
-
 
     return String(value)
       .replace(/&/g, "&amp;")
@@ -1413,8 +1847,21 @@
 
 
   function text(value) {
-
     return escapeHtml(value);
+  }
+
+
+  function displayValue(value) {
+
+    if (
+      value === null ||
+      value === undefined ||
+      String(value).trim() === ""
+    ) {
+      return "–";
+    }
+
+    return text(value);
 
   }
 
@@ -1436,63 +1883,92 @@
           .select("id,name")
           .order("id");
 
-
       if (error) {
 
         console.error(error);
-
         return;
 
       }
 
 
-      const select =
+      const studentSelect =
         document.getElementById(
           "climateZone"
+        );
+
+      const editSelect =
+        document.getElementById(
+          "editClimateZone"
+        );
+
+      const filterSelect =
+        document.getElementById(
+          "filterClimateZone"
         );
 
 
       data.forEach(zone => {
 
-        const option =
-          document.createElement(
-            "option"
+        if (studentSelect) {
+
+          const option =
+            document.createElement(
+              "option"
+            );
+
+          option.value =
+            zone.id;
+
+          option.textContent =
+            zone.name;
+
+          studentSelect.appendChild(
+            option
           );
 
-
-        option.value =
-          zone.id;
+        }
 
 
-        option.textContent =
-          zone.name;
-
-
-        select.appendChild(
-          option
-        );
-
-        const editSelect = document.getElementById("editClimateZone");
         if (editSelect) {
-          const editOption = document.createElement("option");
-          editOption.value = zone.id;
-          editOption.textContent = zone.name;
-          editSelect.appendChild(editOption);
+
+          const option =
+            document.createElement(
+              "option"
+            );
+
+          option.value =
+            zone.id;
+
+          option.textContent =
+            zone.name;
+
+          editSelect.appendChild(
+            option
+          );
+
+        }
+
+
+        if (filterSelect) {
+
+          const option =
+            document.createElement(
+              "option"
+            );
+
+          option.value =
+            zone.name;
+
+          option.textContent =
+            zone.name;
+
+          filterSelect.appendChild(
+            option
+          );
+
         }
 
       });
-
-      const filterSelect =
-        document.getElementById("filterClimateZone");
-
-      if (filterSelect) {
-        data.forEach(zone => {
-          const filterOption = document.createElement("option");
-          filterOption.value = zone.name;
-          filterOption.textContent = zone.name;
-          filterSelect.appendChild(filterOption);
-        });
-      }
 
 
     } catch (error) {
@@ -1505,200 +1981,478 @@
 
 
   /* ========================================================= */
-  /* BESTEHENDE ORTE LADEN */
+  /* VERÖFFENTLICHTE ORTE LADEN */
   /* ========================================================= */
 
-  async function loadPlaces() {
+  async function loadApprovedSubmissions() {
 
     try {
 
-      const response =
-        await fetch(
-          SUPABASE_URL +
-          "/rest/v1/places" +
-          "?select=*,climate_zones(name)",
-          {
-            headers: {
-              "apikey":
-                SUPABASE_KEY,
-
-              "Authorization":
-                "Bearer " +
-                SUPABASE_KEY
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("student_submissions")
+          .select(`
+            *,
+            climate_zones (
+              name
+            )
+          `)
+          .eq(
+            "status",
+            "approved"
+          )
+          .order(
+            "name",
+            {
+              ascending: true
             }
-          }
-        );
+          );
 
 
-      if (!response.ok) {
+      if (error) {
 
-        console.error(
-          await response.text()
-        );
-
+        console.error(error);
         return;
 
       }
 
 
-      const places =
-        await response.json();
+      allApprovedSubmissions =
+        data || [];
 
 
-      /* Orte für die Vergleichsfunktion merken */
-      allPlaces =
-        places;
+      renderMapPlaces();
 
-
-      /* Vergleichsauswahl füllen */
       populateCompareSelects();
 
 
-      places.forEach(place => {
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  /* ========================================================= */
+  /* ORTE AUF DER KARTE */
+  /* ========================================================= */
+
+  function getClimateZoneName(place) {
+
+    return (
+      place.climate_zones &&
+      place.climate_zones.name
+    )
+      ? place.climate_zones.name
+      : "";
+
+  }
+
+
+  function getMapDisplayValue(place) {
+
+    switch (
+      currentDataDisplay
+    ) {
+
+      case "temperature":
+        return place.temperature
+          ? "🌡️ " + place.temperature
+          : "🌡️ keine Angabe";
+
+      case "precipitation":
+        return place.precipitation
+          ? "🌧️ " + place.precipitation
+          : "🌧️ keine Angabe";
+
+      case "vegetation":
+        return place.vegetation
+          ? "🌿 " + place.vegetation
+          : "🌿 keine Angabe";
+
+      case "human_use":
+        return place.human_use
+          ? "🏘️ " + place.human_use
+          : "🏘️ keine Angabe";
+
+      default:
+        return "";
+
+    }
+
+  }
+
+
+  function renderMapPlaces() {
+
+    placeLayer.clearLayers();
+
+
+    const visiblePlaces =
+      allApprovedSubmissions.filter(
+        place => {
+
+          if (
+            currentClimateFilter ===
+            "all"
+          ) {
+            return true;
+          }
+
+          return (
+            getClimateZoneName(place) ===
+            currentClimateFilter
+          );
+
+        }
+      );
+
+
+    visiblePlaces.forEach(
+      place => {
 
         const marker =
           L.marker([
             place.latitude,
             place.longitude
-          ]).addTo(map);
+          ]);
 
-        const mapItem = {
-          type: "place",
-          marker: marker,
-          name: place.name,
-          climateZone: place.climate_zones ? place.climate_zones.name : "",
-          data: null
-        };
-
-        mapItems.push(mapItem);
-
-        loadResult(place.id).then(result => {
-          mapItem.data = result;
-          refreshMapItem(mapItem);
-        });
+        marker.addTo(
+          placeLayer
+        );
 
 
         marker.on(
           "click",
-          () =>
-            showPlace(
+          () => {
+            showApprovedPlace(
               marker,
               place
-            )
-        );
-
-      });
-
-
-    } catch (error) {
-
-      console.error(error);
-
-    }
-
-  }
-
-
-  /* ========================================================= */
-  /* ERGEBNISSE EINES ORTES */
-  /* ========================================================= */
-
-  async function loadResult(
-    placeId
-  ) {
-
-    try {
-
-      const response =
-        await fetch(
-          SUPABASE_URL +
-          "/rest/v1/place_results" +
-          "?select=*" +
-          "&place_id=eq." +
-          encodeURIComponent(placeId) +
-          "&order=created_at.desc" +
-          "&limit=1",
-          {
-            headers: {
-              "apikey":
-                SUPABASE_KEY,
-
-              "Authorization":
-                "Bearer " +
-                SUPABASE_KEY
-            }
+            );
           }
         );
 
 
-      if (!response.ok) {
+        if (
+          currentDataDisplay !==
+          "none"
+        ) {
 
-        return null;
+          const value =
+            getMapDisplayValue(
+              place
+            );
+
+          marker.bindTooltip(
+            `
+              <strong>
+                ${text(place.name)}
+              </strong>
+              <br>
+              ${text(value)}
+            `,
+            {
+              permanent: true,
+              direction: "top",
+              offset: [0, -10],
+              className:
+                "map-data-label"
+            }
+          );
+
+        }
 
       }
+    );
 
 
-      const data =
-        await response.json();
-
-
-      if (!data.length) {
-
-        return null;
-
-      }
-
-
-      return data[0];
-
-    } catch (error) {
-
-      console.error(error);
-
-      return null;
-
-    }
+    updateFilterSummary(
+      visiblePlaces.length
+    );
 
   }
 
 
-  /* ========================================================= */
-  /* RAUMBEISPIEL ANZEIGEN */
+  function updateFilterSummary(
+    numberOfPlaces
+  ) {
+
+    const summary =
+      document.getElementById(
+        "filterSummary"
+      );
+
+    if (!summary) {
+      return;
+    }
+
+
+    let message =
+      numberOfPlaces +
+      (
+        numberOfPlaces === 1
+          ? " Ort wird angezeigt."
+          : " Orte werden angezeigt."
+      );
+
+
+    if (
+      currentClimateFilter !==
+      "all"
+    ) {
+
+      message +=
+        " Klimazone: " +
+        currentClimateFilter +
+        ".";
+
+    }
+
+
+    if (
+      currentDataDisplay !==
+      "none"
+    ) {
+
+      const labels = {
+        temperature:
+          "Temperatur",
+        precipitation:
+          "Niederschlag",
+        vegetation:
+          "Vegetation",
+        human_use:
+          "Menschliche Nutzung"
+      };
+
+      message +=
+        " Direktanzeige: " +
+        labels[currentDataDisplay] +
+        ".";
+
+    }
+
+
+    summary.textContent =
+      message;
+
+  }
+
+
+  function openFilterModal() {
+
+    document.getElementById(
+      "filterClimateZone"
+    ).value =
+      currentClimateFilter;
+
+    document.getElementById(
+      "filterDataDisplay"
+    ).value =
+      currentDataDisplay;
+
+    updateFilterSummary(
+      allApprovedSubmissions.filter(
+        place =>
+          currentClimateFilter ===
+          "all" ||
+          getClimateZoneName(place) ===
+          currentClimateFilter
+      ).length
+    );
+
+    document.getElementById(
+      "filterModal"
+    ).style.display =
+      "block";
+
+  }
+
+
+  function closeFilterModal() {
+
+    document.getElementById(
+      "filterModal"
+    ).style.display =
+      "none";
+
+  }
+
+
+  function applyMapFilters() {
+
+    currentClimateFilter =
+      document.getElementById(
+        "filterClimateZone"
+      ).value;
+
+    currentDataDisplay =
+      document.getElementById(
+        "filterDataDisplay"
+      ).value;
+
+    renderMapPlaces();
+
+    closeFilterModal();
+
+  }
+
+
+  function resetMapFilters() {
+
+    currentClimateFilter =
+      "all";
+
+    currentDataDisplay =
+      "none";
+
+    document.getElementById(
+      "filterClimateZone"
+    ).value =
+      "all";
+
+    document.getElementById(
+      "filterDataDisplay"
+    ).value =
+      "none";
+
+    renderMapPlaces();
+
+  }
+    /* ========================================================= */
+  /* POPUP EINES ORTES */
   /* ========================================================= */
 
-  async function showPlace(
+  function showApprovedPlace(
     marker,
     place
   ) {
 
-    let popup = `
+    const zoneName =
+      getClimateZoneName(
+        place
+      );
 
-      <div style="min-width:230px">
 
-        <h3 style="margin-top:0">
-          ${text(place.name)}
+    let content = `
+
+      <div
+        style="
+          min-width:240px;
+          max-width:330px;
+        "
+      >
+
+        <h3
+          style="
+            margin-top:0;
+            margin-bottom:8px;
+            color:#0b5d7a;
+          "
+        >
+          📍 ${text(place.name)}
         </h3>
 
         <p>
           <strong>Land:</strong>
-          ${text(place.country)}
+          ${displayValue(place.country)}
+        </p>
+
+        <p>
+          <strong>Klimazone:</strong>
+          ${displayValue(zoneName)}
+        </p>
+
+        <hr>
+
+        <p>
+          <strong>🌡️ Temperatur:</strong><br>
+          ${displayValue(place.temperature)}
+        </p>
+
+        <p>
+          <strong>🌧️ Niederschlag:</strong><br>
+          ${displayValue(place.precipitation)}
+        </p>
+
+        <p>
+          <strong>🌿 Vegetation:</strong><br>
+          ${displayValue(place.vegetation)}
+        </p>
+
+        <p>
+          <strong>🏘️ Menschliche Nutzung:</strong><br>
+          ${displayValue(place.human_use)}
         </p>
 
     `;
 
 
     if (
-      place.climate_zones &&
-      place.climate_zones.name
+      place.findings &&
+      place.findings.trim() !== ""
     ) {
 
-      popup += `
+      content += `
 
-        <p>
-          <strong>Klimazone:</strong>
-          ${text(
-            place.climate_zones.name
-          )}
+        <div
+          style="
+            background:#fff8dc;
+            border-left:4px solid #f4c542;
+            padding:9px;
+            margin-top:12px;
+          "
+        >
+
+          <strong>
+            💡 Erkenntnis zum Ort
+          </strong>
+
+          <br>
+
+          ${text(place.findings)}
+
+        </div>
+
+      `;
+
+    }
+
+
+    if (
+      place.climate_diagram_path
+    ) {
+
+      content +=
+        diagramHtml(
+          place.climate_diagram_path,
+          place.name
+        );
+
+    }
+
+
+    if (
+      place.source &&
+      place.source.trim() !== ""
+    ) {
+
+      content += `
+
+        <p
+          style="
+            margin-top:14px;
+            font-size:12px;
+            color:#555;
+          "
+        >
+          <strong>🔗 Quelle:</strong><br>
+          ${text(place.source)}
         </p>
 
       `;
@@ -1706,117 +2460,51 @@
     }
 
 
-    const result =
-      await loadResult(
-        place.id
-      );
-
-
-    if (result) {
-
-      popup += `
-
-        <hr>
-
-        <p>
-          <strong>🌡️ Temperatur:</strong><br>
-          ${text(
-            result.temperature
-          )}
-        </p>
-
-        <p>
-          <strong>🌧️ Niederschlag:</strong><br>
-          ${text(
-            result.precipitation
-          )}
-        </p>
-
-        <p>
-          <strong>🌿 Vegetation:</strong><br>
-          ${text(
-            result.vegetation
-          )}
-        </p>
-
-        <p>
-          <strong>🏘️ Menschliche Nutzung:</strong><br>
-          ${text(
-            result.human_use
-          )}
-        </p>
-
-        <p>
-          <strong>💡 Erkenntnis:</strong><br>
-          ${text(
-            result.findings
-          )}
-        </p>
-
-      `;
-
-    }
-
-
-    popup += `
+    content += `
       </div>
     `;
 
 
     marker
-      .bindPopup(popup)
+      .bindPopup(
+        content,
+        {
+          maxWidth: 360
+        }
+      )
       .openPopup();
 
   }
 
 
   /* ========================================================= */
-  /* VERGLEICHSFUNKTION */
+  /* VERGLEICH */
   /* ========================================================= */
 
-  let allPlaces = [];
-  let allApprovedSubmissions = [];
+  function formatLatitude(
+    latitude
+  ) {
 
+    const value =
+      Number(latitude);
 
-  function formatLatitude(latitude) {
-
-    const value = Number(latitude);
-
-    if (!Number.isFinite(value)) {
-      return "Keine Angabe";
-    }
-
-    if (value === 0) {
-      return "0° (Äquator)";
+    if (
+      Number.isNaN(value)
+    ) {
+      return "–";
     }
 
     const direction =
-      value > 0 ? "N" : "S";
+      value >= 0
+        ? "N"
+        : "S";
 
     return (
       Math.abs(value)
-        .toFixed(1)
-        .replace(".", ",") +
+        .toFixed(1) +
       "° " +
       direction
     );
-
-  }
-
-
-  function getComparisonItems() {
-
-    return allApprovedSubmissions.map(submission => ({
-      key: "student:" + submission.id,
-      type: "student",
-      typeLabel: "Ort",
-      id: submission.id,
-      name: submission.name,
-      country: submission.country,
-      latitude: submission.latitude,
-      climate_zones: submission.climate_zones,
-      original: submission
-    }));
 
   }
 
@@ -1828,7 +2516,6 @@
         "comparePlace1"
       );
 
-
     const select2 =
       document.getElementById(
         "comparePlace2"
@@ -1839,16 +2526,14 @@
       !select1 ||
       !select2
     ) {
-
       return;
-
     }
 
 
-    const oldValue1 =
+    const old1 =
       select1.value;
 
-    const oldValue2 =
+    const old2 =
       select2.value;
 
 
@@ -1858,7 +2543,6 @@
       </option>
     `;
 
-
     select2.innerHTML = `
       <option value="">
         Bitte auswählen
@@ -1866,70 +2550,74 @@
     `;
 
 
-    const items =
-      getComparisonItems();
+    allApprovedSubmissions
+      .forEach(place => {
+
+        const label =
+          place.country
+            ? (
+                place.name +
+                " – " +
+                place.country
+              )
+            : place.name;
 
 
-    items.forEach(item => {
+        const option1 =
+          document.createElement(
+            "option"
+          );
 
-      const label =
-        item.name +
-        (
-          item.country
-            ? " – " + item.country
-            : ""
+        option1.value =
+          String(place.id);
+
+        option1.textContent =
+          label;
+
+        select1.appendChild(
+          option1
         );
 
 
-      const option1 =
-        document.createElement(
-          "option"
+        const option2 =
+          document.createElement(
+            "option"
+          );
+
+        option2.value =
+          String(place.id);
+
+        option2.textContent =
+          label;
+
+        select2.appendChild(
+          option2
         );
 
-      option1.value =
-        item.key;
-
-      option1.textContent =
-        label;
-
-      select1.appendChild(
-        option1
-      );
-
-
-      const option2 =
-        document.createElement(
-          "option"
-        );
-
-      option2.value =
-        item.key;
-
-      option2.textContent =
-        label;
-
-      select2.appendChild(
-        option2
-      );
-
-    });
+      });
 
 
     if (
-      items.some(
-        item => item.key === oldValue1
+      allApprovedSubmissions.some(
+        place =>
+          String(place.id) ===
+          old1
       )
     ) {
-      select1.value = oldValue1;
+      select1.value =
+        old1;
     }
 
 
     if (
-      items.some(
-        item => item.key === oldValue2
+      allApprovedSubmissions.some(
+        place =>
+          String(place.id) ===
+          old2
       )
     ) {
-      select2.value = oldValue2;
+      select2.value =
+        old2;
     }
 
   }
@@ -1939,23 +2627,20 @@
 
     populateCompareSelects();
 
-
-    document.getElementById(
-      "compareModal"
-    ).style.display =
-      "block";
-
-
     document.getElementById(
       "compareError"
     ).style.display =
       "none";
 
-
     document.getElementById(
       "compareResult"
     ).style.display =
       "none";
+
+    document.getElementById(
+      "compareModal"
+    ).style.display =
+      "block";
 
   }
 
@@ -1970,67 +2655,33 @@
   }
 
 
-  async function getComparisonData(item) {
+  function comparisonCell(
+    value
+  ) {
 
-    if (item.type === "student") {
-
-      return {
-        temperature:
-          item.original.temperature,
-        precipitation:
-          item.original.precipitation,
-        vegetation:
-          item.original.vegetation,
-        human_use:
-          item.original.human_use,
-        findings:
-          item.original.findings
-      };
-
-    }
-
-
-    return await loadResult(
-      item.id
+    return displayValue(
+      value
     );
 
   }
 
 
-  function comparisonValue(value) {
+  function runComparison() {
 
-    if (
-      value === null ||
-      value === undefined ||
-      String(value).trim() === ""
-    ) {
-      return "Keine Daten";
-    }
-
-    return text(value);
-
-  }
-
-
-  async function runComparison() {
-
-    const place1Key =
+    const id1 =
       document.getElementById(
         "comparePlace1"
       ).value;
 
-
-    const place2Key =
+    const id2 =
       document.getElementById(
         "comparePlace2"
       ).value;
-
 
     const errorBox =
       document.getElementById(
         "compareError"
       );
-
 
     const resultBox =
       document.getElementById(
@@ -2041,14 +2692,13 @@
     errorBox.style.display =
       "none";
 
-
     resultBox.style.display =
       "none";
 
 
     if (
-      !place1Key ||
-      !place2Key
+      !id1 ||
+      !id2
     ) {
 
       errorBox.textContent =
@@ -2063,7 +2713,7 @@
 
 
     if (
-      place1Key === place2Key
+      id1 === id2
     ) {
 
       errorBox.textContent =
@@ -2077,21 +2727,18 @@
     }
 
 
-    const items =
-      getComparisonItems();
-
-
     const place1 =
-      items.find(
-        item =>
-          item.key === place1Key
+      allApprovedSubmissions.find(
+        place =>
+          String(place.id) ===
+          String(id1)
       );
 
-
     const place2 =
-      items.find(
-        item =>
-          item.key === place2Key
+      allApprovedSubmissions.find(
+        place =>
+          String(place.id) ===
+          String(id2)
       );
 
 
@@ -2109,26 +2756,6 @@
       return;
 
     }
-
-
-    resultBox.innerHTML = `
-      <p>
-        Vergleich wird geladen ...
-      </p>
-    `;
-
-    resultBox.style.display =
-      "block";
-
-
-    const [
-      result1,
-      result2
-    ] =
-      await Promise.all([
-        getComparisonData(place1),
-        getComparisonData(place2)
-      ]);
 
 
     resultBox.innerHTML = `
@@ -2163,32 +2790,15 @@
             <tr>
 
               <td>
-                <strong>🌐 Land</strong>
+                <strong>Land</strong>
               </td>
 
               <td>
-                ${comparisonValue(place1.country)}
+                ${comparisonCell(place1.country)}
               </td>
 
               <td>
-                ${comparisonValue(place2.country)}
-              </td>
-
-            </tr>
-
-
-            <tr>
-
-              <td>
-                <strong>📍 Breitengrad</strong>
-              </td>
-
-              <td>
-                ${text(formatLatitude(place1.latitude))}
-              </td>
-
-              <td>
-                ${text(formatLatitude(place2.latitude))}
+                ${comparisonCell(place2.country)}
               </td>
 
             </tr>
@@ -2197,27 +2807,36 @@
             <tr>
 
               <td>
-                <strong>🌍 Klimazone</strong>
+                <strong>Breitengrad</strong>
               </td>
 
               <td>
-                ${
-                  place1.climate_zones
-                    ? text(
-                        place1.climate_zones.name
-                      )
-                    : "Keine Angabe"
-                }
+                ${formatLatitude(place1.latitude)}
               </td>
 
               <td>
-                ${
-                  place2.climate_zones
-                    ? text(
-                        place2.climate_zones.name
-                      )
-                    : "Keine Angabe"
-                }
+                ${formatLatitude(place2.latitude)}
+              </td>
+
+            </tr>
+
+
+            <tr>
+
+              <td>
+                <strong>Klimazone</strong>
+              </td>
+
+              <td>
+                ${comparisonCell(
+                  getClimateZoneName(place1)
+                )}
+              </td>
+
+              <td>
+                ${comparisonCell(
+                  getClimateZoneName(place2)
+                )}
               </td>
 
             </tr>
@@ -2230,23 +2849,11 @@
               </td>
 
               <td>
-                ${
-                  result1
-                    ? comparisonValue(
-                        result1.temperature
-                      )
-                    : "Keine Daten"
-                }
+                ${comparisonCell(place1.temperature)}
               </td>
 
               <td>
-                ${
-                  result2
-                    ? comparisonValue(
-                        result2.temperature
-                      )
-                    : "Keine Daten"
-                }
+                ${comparisonCell(place2.temperature)}
               </td>
 
             </tr>
@@ -2259,23 +2866,11 @@
               </td>
 
               <td>
-                ${
-                  result1
-                    ? comparisonValue(
-                        result1.precipitation
-                      )
-                    : "Keine Daten"
-                }
+                ${comparisonCell(place1.precipitation)}
               </td>
 
               <td>
-                ${
-                  result2
-                    ? comparisonValue(
-                        result2.precipitation
-                      )
-                    : "Keine Daten"
-                }
+                ${comparisonCell(place2.precipitation)}
               </td>
 
             </tr>
@@ -2288,23 +2883,11 @@
               </td>
 
               <td>
-                ${
-                  result1
-                    ? comparisonValue(
-                        result1.vegetation
-                      )
-                    : "Keine Daten"
-                }
+                ${comparisonCell(place1.vegetation)}
               </td>
 
               <td>
-                ${
-                  result2
-                    ? comparisonValue(
-                        result2.vegetation
-                      )
-                    : "Keine Daten"
-                }
+                ${comparisonCell(place2.vegetation)}
               </td>
 
             </tr>
@@ -2317,23 +2900,11 @@
               </td>
 
               <td>
-                ${
-                  result1
-                    ? comparisonValue(
-                        result1.human_use
-                      )
-                    : "Keine Daten"
-                }
+                ${comparisonCell(place1.human_use)}
               </td>
 
               <td>
-                ${
-                  result2
-                    ? comparisonValue(
-                        result2.human_use
-                      )
-                    : "Keine Daten"
-                }
+                ${comparisonCell(place2.human_use)}
               </td>
 
             </tr>
@@ -2346,23 +2917,11 @@
               </td>
 
               <td>
-                ${
-                  result1
-                    ? comparisonValue(
-                        result1.findings
-                      )
-                    : "Keine Daten"
-                }
+                ${comparisonCell(place1.findings)}
               </td>
 
               <td>
-                ${
-                  result2
-                    ? comparisonValue(
-                        result2.findings
-                      )
-                    : "Keine Daten"
-                }
+                ${comparisonCell(place2.findings)}
               </td>
 
             </tr>
@@ -2376,7 +2935,9 @@
 
       <div class="compare-question">
 
-        <strong>💭 Was fällt dir auf?</strong>
+        <strong>
+          💭 Was fällt dir auf?
+        </strong>
 
         <br><br>
 
@@ -2388,369 +2949,15 @@
 
     `;
 
-  }
 
-
-  /* ========================================================= */
-  /* FREIGEGEBENE SCHÜLERBEITRÄGE */
-  /* ========================================================= */
-
-  async function loadApprovedSubmissions() {
-
-    try {
-
-      const {
-        data,
-        error
-      } =
-        await supabaseClient
-          .from("student_submissions")
-          .select(
-            "*, climate_zones(name)"
-          )
-          .eq(
-            "status",
-            "approved"
-          )
-          .order(
-            "created_at",
-            {
-              ascending: true
-            }
-          );
-
-
-      if (error) {
-
-        console.error(error);
-
-        return;
-
-      }
-
-
-      /* Freigegebene Schülerorte für den Vergleich merken */
-      allApprovedSubmissions =
-        data || [];
-
-
-      /* Vergleichsauswahl aktualisieren */
-      populateCompareSelects();
-
-
-      data.forEach(
-        submission => {
-
-          const marker =
-            L.marker([
-              submission.latitude,
-              submission.longitude
-            ]).addTo(map);
-
-          const mapItem = {
-            type: "student",
-            marker: marker,
-            name: submission.name,
-            climateZone: submission.climate_zones ? submission.climate_zones.name : "",
-            data: {
-              temperature: submission.temperature,
-              precipitation: submission.precipitation,
-              vegetation: submission.vegetation,
-              human_use: submission.human_use
-            }
-          };
-
-          mapItems.push(mapItem);
-
-
-          let popup = `
-
-            <div style="min-width:230px">
-
-              <h3 style="margin-top:5px">
-                ${text(
-                  submission.name
-                )}
-              </h3>
-
-              <p>
-                <strong>Land:</strong>
-                ${text(
-                  submission.country
-                )}
-              </p>
-
-          `;
-
-
-          if (
-            submission.climate_zones &&
-            submission.climate_zones.name
-          ) {
-
-            popup += `
-
-              <p>
-                <strong>Klimazone:</strong>
-                ${text(
-                  submission.climate_zones.name
-                )}
-              </p>
-
-            `;
-
-          }
-
-
-          if (
-            submission.temperature
-          ) {
-
-            popup += `
-
-              <p>
-                <strong>🌡️ Temperatur:</strong><br>
-                ${text(
-                  submission.temperature
-                )}
-              </p>
-
-            `;
-
-          }
-
-
-          if (
-            submission.precipitation
-          ) {
-
-            popup += `
-
-              <p>
-                <strong>🌧️ Niederschlag:</strong><br>
-                ${text(
-                  submission.precipitation
-                )}
-              </p>
-
-            `;
-
-          }
-
-
-          if (
-            submission.vegetation
-          ) {
-
-            popup += `
-
-              <p>
-                <strong>🌿 Vegetation:</strong><br>
-                ${text(
-                  submission.vegetation
-                )}
-              </p>
-
-            `;
-
-          }
-
-
-          if (
-            submission.human_use
-          ) {
-
-            popup += `
-
-              <p>
-                <strong>🏘️ Menschliche Nutzung:</strong><br>
-                ${text(
-                  submission.human_use
-                )}
-              </p>
-
-            `;
-
-          }
-
-
-          if (
-            submission.findings
-          ) {
-
-            popup += `
-
-              <p>
-                <strong>💡 Erkenntnis:</strong><br>
-                ${text(
-                  submission.findings
-                )}
-              </p>
-
-            `;
-
-          }
-
-
-          if (
-            submission.source
-          ) {
-
-            popup += `
-
-              <p>
-                <strong>🔗 Quelle:</strong><br>
-                ${text(
-                  submission.source
-                )}
-              </p>
-
-            `;
-
-          }
-
-
-          popup += `
-            </div>
-          `;
-
-
-          marker.bindPopup(
-            popup
-          );
-
-        }
-      );
-
-
-    } catch (error) {
-
-      console.error(error);
-
-    }
+    resultBox.style.display =
+      "block";
 
   }
 
 
   /* ========================================================= */
-  /* KARTENFILTER UND DATENANZEIGE */
-  /* ========================================================= */
-
-  let activeMapFilters = {
-    climateZone: "all",
-    dataDisplay: "none"
-  };
-
-  function openFilterModal() {
-    document.getElementById("filterClimateZone").value = activeMapFilters.climateZone;
-    document.getElementById("filterDataDisplay").value = activeMapFilters.dataDisplay;
-    document.getElementById("filterModal").style.display = "block";
-  }
-
-  function closeFilterModal() {
-    document.getElementById("filterModal").style.display = "none";
-  }
-
-  function shortMapText(value) {
-    if (value === null || value === undefined || String(value).trim() === "") {
-      return "Keine Daten";
-    }
-    const valueText = String(value).trim();
-    return valueText.length > 80 ? valueText.slice(0, 77) + "…" : valueText;
-  }
-
-  function getMapLabel(item) {
-    if (activeMapFilters.dataDisplay === "none") return "";
-
-    const data = item.data || {};
-    const icons = {
-      temperature: "🌡️",
-      precipitation: "🌧️",
-      vegetation: "🌿",
-      human_use: "🏘️"
-    };
-
-    return (
-      "<strong>" + escapeHtml(item.name) + "</strong><br>" +
-      icons[activeMapFilters.dataDisplay] + " " +
-      escapeHtml(shortMapText(data[activeMapFilters.dataDisplay]))
-    );
-  }
-
-  function refreshMapItem(item) {
-    const zoneMatches =
-      activeMapFilters.climateZone === "all" ||
-      item.climateZone === activeMapFilters.climateZone;
-
-    const shouldShow = zoneMatches;
-
-    if (shouldShow) {
-      if (!map.hasLayer(item.marker)) item.marker.addTo(map);
-
-      if (activeMapFilters.dataDisplay !== "none") {
-        item.marker.bindTooltip(getMapLabel(item), {
-          permanent: true,
-          direction: "top",
-          offset: [0, -8],
-          className: "map-data-label",
-          opacity: 0.95
-        });
-      } else {
-        item.marker.unbindTooltip();
-      }
-    } else {
-      item.marker.unbindTooltip();
-      if (map.hasLayer(item.marker)) map.removeLayer(item.marker);
-    }
-  }
-
-  function updateFilterSummary() {
-    const visibleCount = mapItems.filter(item => {
-      const zoneMatches = activeMapFilters.climateZone === "all" || item.climateZone === activeMapFilters.climateZone;
-      return zoneMatches;
-    }).length;
-
-    const displayNames = {
-      none: "keine Zusatzdaten",
-      temperature: "Temperatur",
-      precipitation: "Niederschlag",
-      vegetation: "Vegetation",
-      human_use: "menschliche Nutzung"
-    };
-
-    document.getElementById("filterSummary").textContent =
-      "Sichtbare Orte: " + visibleCount +
-      " · Kartenanzeige: " + displayNames[activeMapFilters.dataDisplay];
-  }
-
-  function applyMapFilters() {
-    activeMapFilters = {
-      climateZone: document.getElementById("filterClimateZone").value,
-      dataDisplay: document.getElementById("filterDataDisplay").value
-    };
-
-    mapItems.forEach(refreshMapItem);
-    updateFilterSummary();
-    closeFilterModal();
-  }
-
-  function resetMapFilters() {
-    activeMapFilters = {
-      climateZone: "all",
-      placeType: "all",
-      dataDisplay: "none"
-    };
-
-    document.getElementById("filterClimateZone").value = "all";
-    document.getElementById("filterDataDisplay").value = "none";
-
-    mapItems.forEach(refreshMapItem);
-    updateFilterSummary();
-  }
-
-
-  /* ========================================================= */
-  /* SCHÜLERFORMULAR */
+  /* SCHÜLERFORMULAR ÖFFNEN / SCHLIESSEN */
   /* ========================================================= */
 
   function openStudentForm() {
@@ -2776,11 +2983,14 @@
 
 
   /* ========================================================= */
-  /* ORT AUSWÄHLEN */
+  /* POSITION AUF DER KARTE AUSWÄHLEN */
   /* ========================================================= */
 
   let selectingLocation =
     false;
+
+  let locationMarker =
+    null;
 
 
   function startLocationSelection() {
@@ -2788,21 +2998,19 @@
     selectingLocation =
       true;
 
-
-    document.getElementById(
-      "locationStatus"
-    ).innerHTML =
-      "📍 Jetzt auf der Karte auf den gewünschten Ort klicken.";
-
-
     document.getElementById(
       "studentModal"
     ).style.display =
       "none";
 
+    document.getElementById(
+      "locationStatus"
+    ).textContent =
+      "Bitte jetzt den gewünschten Ort auf der Karte anklicken.";
 
-    map.getContainer().style.cursor =
-      "crosshair";
+    alert(
+      "Tippe jetzt auf der Weltkarte auf den gewünschten Ort."
+    );
 
   }
 
@@ -2812,10 +3020,6 @@
     selectingLocation =
       false;
 
-
-    map.getContainer().style.cursor =
-      "";
-
   }
 
 
@@ -2823,44 +3027,61 @@
     "click",
     function(event) {
 
-      if (!selectingLocation) {
-
+      if (
+        !selectingLocation
+      ) {
         return;
-
       }
 
 
-      const latitude =
-        event.latlng.lat.toFixed(4);
+      const lat =
+        event.latlng.lat;
 
-
-      const longitude =
-        event.latlng.lng.toFixed(4);
+      const lng =
+        event.latlng.lng;
 
 
       document.getElementById(
         "latitude"
       ).value =
-        latitude;
-
+        lat;
 
       document.getElementById(
         "longitude"
       ).value =
-        longitude;
+        lng;
+
+
+      if (
+        locationMarker
+      ) {
+
+        map.removeLayer(
+          locationMarker
+        );
+
+      }
+
+
+      locationMarker =
+        L.marker([
+          lat,
+          lng
+        ])
+        .addTo(map);
 
 
       document.getElementById(
         "locationStatus"
       ).innerHTML =
-        "📍 Position gewählt: " +
-        latitude +
-        "°, " +
-        longitude +
-        "°";
+        "✅ Position ausgewählt:<br>" +
+        lat.toFixed(4) +
+        ", " +
+        lng.toFixed(4);
 
 
-      stopLocationSelection();
+      selectingLocation =
+        false;
 
 
       document.getElementById(
@@ -2887,11 +3108,16 @@
         event.preventDefault();
 
 
+        const submitButton =
+          this.querySelector(
+            'button[type="submit"]'
+          );
+
+
         const latitude =
           document.getElementById(
             "latitude"
           ).value;
-
 
         const longitude =
           document.getElementById(
@@ -2913,94 +3139,148 @@
         }
 
 
-        const submission = {
+        const diagramInput =
+          document.getElementById(
+            "climateDiagram"
+          );
 
-          name:
-            document
-              .getElementById(
-                "name"
-              )
-              .value
-              .trim(),
+        const diagramFile =
+          diagramInput.files &&
+          diagramInput.files.length
+            ? diagramInput.files[0]
+            : null;
 
-          country:
-            document
-              .getElementById(
-                "country"
-              )
-              .value
-              .trim(),
 
-          latitude:
-            Number(latitude),
+        if (
+          !validateDiagramFile(
+            diagramFile
+          )
+        ) {
+          return;
+        }
 
-          longitude:
-            Number(longitude),
 
-          climate_zone_id:
-            Number(
-              document
-                .getElementById(
-                  "climateZone"
-                )
-                .value
-            ),
+        submitButton.disabled =
+          true;
 
-          temperature:
-            document
-              .getElementById(
-                "temperature"
-              )
-              .value
-              .trim(),
+        submitButton.textContent =
+          "Wird gespeichert ...";
 
-          precipitation:
-            document
-              .getElementById(
-                "precipitation"
-              )
-              .value
-              .trim(),
 
-          vegetation:
-            document
-              .getElementById(
-                "vegetation"
-              )
-              .value
-              .trim(),
-
-          human_use:
-            document
-              .getElementById(
-                "humanUse"
-              )
-              .value
-              .trim(),
-
-          findings:
-            document
-              .getElementById(
-                "findings"
-              )
-              .value
-              .trim(),
-
-          source:
-            document
-              .getElementById(
-                "source"
-              )
-              .value
-              .trim(),
-
-          status:
-            "pending"
-
-        };
+        let uploadedPath =
+          null;
 
 
         try {
+
+          if (
+            diagramFile
+          ) {
+
+            submitButton.textContent =
+              "Klimadiagramm wird hochgeladen ...";
+
+            uploadedPath =
+              await uploadClimateDiagram(
+                diagramFile
+              );
+
+          }
+
+
+          submitButton.textContent =
+            "Beitrag wird gespeichert ...";
+
+
+          const submission = {
+
+            name:
+              document
+                .getElementById(
+                  "name"
+                )
+                .value
+                .trim(),
+
+            country:
+              document
+                .getElementById(
+                  "country"
+                )
+                .value
+                .trim(),
+
+            latitude:
+              Number(latitude),
+
+            longitude:
+              Number(longitude),
+
+            climate_zone_id:
+              Number(
+                document
+                  .getElementById(
+                    "climateZone"
+                  )
+                  .value
+              ),
+
+            temperature:
+              document
+                .getElementById(
+                  "temperature"
+                )
+                .value
+                .trim(),
+
+            precipitation:
+              document
+                .getElementById(
+                  "precipitation"
+                )
+                .value
+                .trim(),
+
+            vegetation:
+              document
+                .getElementById(
+                  "vegetation"
+                )
+                .value
+                .trim(),
+
+            human_use:
+              document
+                .getElementById(
+                  "humanUse"
+                )
+                .value
+                .trim(),
+
+            findings:
+              document
+                .getElementById(
+                  "findings"
+                )
+                .value
+                .trim(),
+
+            source:
+              document
+                .getElementById(
+                  "source"
+                )
+                .value
+                .trim(),
+
+            climate_diagram_path:
+              uploadedPath,
+
+            status:
+              "pending"
+
+          };
+
 
           const {
             error
@@ -3015,46 +3295,46 @@
 
 
           if (error) {
-
-            console.error(error);
-
-            alert(
-              "Der Beitrag konnte nicht gespeichert werden:\n\n" +
-              error.message
-            );
-
-            return;
-
+            throw error;
           }
 
 
           alert(
-            "✅ Danke!\n\n" +
-            "Der Beitrag wurde eingereicht und wartet jetzt auf die Freigabe."
+            "Danke! Der Beitrag wurde eingereicht und wartet jetzt auf die Freigabe."
           );
 
 
-          document
-            .getElementById(
-              "studentForm"
-            )
-            .reset();
+          this.reset();
 
 
           document.getElementById(
             "latitude"
-          ).value = "";
-
+          ).value =
+            "";
 
           document.getElementById(
             "longitude"
-          ).value = "";
-
+          ).value =
+            "";
 
           document.getElementById(
             "locationStatus"
-          ).innerHTML =
+          ).textContent =
             "Noch keinen Ort ausgewählt.";
+
+
+          if (
+            locationMarker
+          ) {
+
+            map.removeLayer(
+              locationMarker
+            );
+
+            locationMarker =
+              null;
+
+          }
 
 
           closeStudentForm();
@@ -3065,8 +3345,16 @@
           console.error(error);
 
           alert(
-            "Es ist ein Verbindungsfehler aufgetreten."
+            "Der Beitrag konnte leider nicht gespeichert werden. Bitte versuche es noch einmal."
           );
+
+        } finally {
+
+          submitButton.disabled =
+            false;
+
+          submitButton.textContent =
+            "✅ Beitrag absenden";
 
         }
 
@@ -3075,33 +3363,39 @@
 
 
   /* ========================================================= */
-  /* LEHRER LOGIN */
+  /* LEHRERBEREICH ÖFFNEN */
   /* ========================================================= */
 
   async function openTeacherArea() {
 
     const {
-      data: {
-        session
-      }
+      data
     } =
-      await supabaseClient
-        .auth
+      await supabaseClient.auth
         .getSession();
 
 
-    if (session) {
-
-      await showTeacherArea();
-
-    } else {
+    if (
+      data &&
+      data.session
+    ) {
 
       document.getElementById(
-        "teacherLoginModal"
+        "teacherModal"
       ).style.display =
         "block";
 
+      await loadTeacherSubmissions();
+
+      return;
+
     }
+
+
+    document.getElementById(
+      "teacherLoginModal"
+    ).style.display =
+      "block";
 
   }
 
@@ -3116,6 +3410,18 @@
   }
 
 
+  function closeTeacherArea() {
+
+    document.getElementById(
+      "teacherModal"
+    ).style.display =
+      "none";
+
+  }
+    /* ========================================================= */
+  /* LEHRER LOGIN */
+  /* ========================================================= */
+
   document
     .getElementById(
       "loginForm"
@@ -3128,16 +3434,19 @@
 
 
         const email =
-          document.getElementById(
-            "teacherEmail"
-          ).value;
-
+          document
+            .getElementById(
+              "teacherEmail"
+            )
+            .value
+            .trim();
 
         const password =
-          document.getElementById(
-            "teacherPassword"
-          ).value;
-
+          document
+            .getElementById(
+              "teacherPassword"
+            )
+            .value;
 
         const errorBox =
           document.getElementById(
@@ -3152,8 +3461,7 @@
         const {
           error
         } =
-          await supabaseClient
-            .auth
+          await supabaseClient.auth
             .signInWithPassword({
               email: email,
               password: password
@@ -3162,8 +3470,10 @@
 
         if (error) {
 
+          console.error(error);
+
           errorBox.textContent =
-            "Anmeldung fehlgeschlagen. Bitte E-Mail und Passwort prüfen.";
+            "Die Anmeldung hat nicht funktioniert. Bitte E-Mail und Passwort prüfen.";
 
           errorBox.style.display =
             "block";
@@ -3173,49 +3483,155 @@
         }
 
 
-        closeTeacherLogin();
+        document.getElementById(
+          "teacherLoginModal"
+        ).style.display =
+          "none";
+
+        document.getElementById(
+          "teacherModal"
+        ).style.display =
+          "block";
 
 
-        await showTeacherArea();
+        await loadTeacherSubmissions();
 
       }
     );
 
 
-  /* ========================================================= */
-  /* LEHRERBEREICH ÖFFNEN */
-  /* ========================================================= */
+  async function teacherLogout() {
 
-  async function showTeacherArea() {
-
-    document.getElementById(
-      "teacherModal"
-    ).style.display =
-      "block";
-
-
-    await loadPendingSubmissions();
-
-    await loadApprovedTeacherSubmissions();
-
-  }
-
-
-  function closeTeacherArea() {
+    await supabaseClient.auth
+      .signOut();
 
     document.getElementById(
       "teacherModal"
     ).style.display =
       "none";
 
+    alert(
+      "Du wurdest abgemeldet."
+    );
+
   }
 
 
   /* ========================================================= */
-  /* AUSSTEHENDE BEITRÄGE LADEN */
+  /* BEITRÄGE FÜR LEHRER LADEN */
   /* ========================================================= */
 
-  async function loadPendingSubmissions() {
+  async function loadTeacherSubmissions() {
+
+    const pendingList =
+      document.getElementById(
+        "submissionList"
+      );
+
+    const approvedList =
+      document.getElementById(
+        "approvedSubmissionList"
+      );
+
+
+    pendingList.innerHTML =
+      "Beiträge werden geladen ...";
+
+    approvedList.innerHTML =
+      "Veröffentlichte Beiträge werden geladen ...";
+
+
+    try {
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from(
+            "student_submissions"
+          )
+          .select(`
+            *,
+            climate_zones (
+              name
+            )
+          `)
+          .in(
+            "status",
+            [
+              "pending",
+              "approved"
+            ]
+          )
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      const pending =
+        (data || [])
+          .filter(
+            item =>
+              item.status ===
+              "pending"
+          );
+
+
+      const approved =
+        (data || [])
+          .filter(
+            item =>
+              item.status ===
+              "approved"
+          );
+
+
+      renderPendingSubmissions(
+        pending
+      );
+
+      renderApprovedSubmissions(
+        approved
+      );
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      pendingList.innerHTML = `
+        <div class="login-error" style="display:block">
+          Die Beiträge konnten nicht geladen werden.
+        </div>
+      `;
+
+      approvedList.innerHTML = `
+        <div class="login-error" style="display:block">
+          Die veröffentlichten Orte konnten nicht geladen werden.
+        </div>
+      `;
+
+    }
+
+  }
+
+
+  /* ========================================================= */
+  /* OFFENE BEITRÄGE */
+  /* ========================================================= */
+
+  function renderPendingSubmissions(
+    submissions
+  ) {
 
     const list =
       document.getElementById(
@@ -3223,65 +3639,14 @@
       );
 
 
-    list.innerHTML =
-      "Beiträge werden geladen ...";
-
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from(
-          "student_submissions"
-        )
-        .select(
-          "*, climate_zones(name)"
-        )
-        .eq(
-          "status",
-          "pending"
-        )
-        .order(
-          "created_at",
-          {
-            ascending: true
-          }
-        );
-
-
-    if (error) {
-
-      console.error(error);
+    if (
+      !submissions.length
+    ) {
 
       list.innerHTML = `
-        <div class="submission-card">
-          Fehler beim Laden der Beiträge:
-          ${text(error.message)}
-        </div>
-      `;
-
-      return;
-
-    }
-
-
-    if (!data.length) {
-
-      list.innerHTML = `
-
         <div class="empty-message">
-
-          🎉 Zurzeit gibt es keine
-          offenen Beiträge.
-
-          <br><br>
-
-          Alle eingereichten Beiträge
-          wurden bereits bearbeitet.
-
+          ✅ Zurzeit gibt es keine offenen Beiträge.
         </div>
-
       `;
 
       return;
@@ -3289,139 +3654,236 @@
     }
 
 
-    list.innerHTML = "";
+    list.innerHTML =
+      submissions
+        .map(item => {
+
+          const zone =
+            item.climate_zones &&
+            item.climate_zones.name
+              ? item.climate_zones.name
+              : "–";
 
 
-    data.forEach(
-      submission => {
+          return `
 
-        const card =
-          document.createElement(
-            "div"
-          );
+            <div class="submission-card">
 
+              <span class="status-pending">
+                wartet auf Freigabe
+              </span>
 
-        card.className =
-          "submission-card";
+              <h3>
+                ${text(item.name)}
+              </h3>
 
+              <p>
+                <strong>Land:</strong>
+                ${displayValue(item.country)}
+              </p>
 
-        card.innerHTML = `
+              <p>
+                <strong>Position:</strong>
+                ${Number(item.latitude).toFixed(4)},
+                ${Number(item.longitude).toFixed(4)}
+              </p>
 
-          <span class="status-pending">
-            WARTET AUF FREIGABE
-          </span>
+              <p>
+                <strong>Klimazone:</strong>
+                ${displayValue(zone)}
+              </p>
 
-          <h3>
-            ${text(
-              submission.name
-            )}
-          </h3>
+              <p>
+                <strong>🌡️ Temperatur:</strong>
+                ${displayValue(item.temperature)}
+              </p>
 
-          <p>
-            <strong>Land:</strong>
-            ${text(
-              submission.country
-            )}
-          </p>
+              <p>
+                <strong>🌧️ Niederschlag:</strong>
+                ${displayValue(item.precipitation)}
+              </p>
 
-          <p>
-            <strong>Position:</strong>
-            ${text(
-              submission.latitude
-            )},
-            ${text(
-              submission.longitude
-            )}
-          </p>
+              <p>
+                <strong>🌿 Vegetation:</strong>
+                ${displayValue(item.vegetation)}
+              </p>
 
-          <p>
-            <strong>Klimazone:</strong>
-            ${
-              submission.climate_zones
-              ? text(
-                  submission
-                    .climate_zones
-                    .name
-                )
-              : ""
-            }
-          </p>
+              <p>
+                <strong>🏘️ Menschliche Nutzung:</strong>
+                ${displayValue(item.human_use)}
+              </p>
 
-          <p>
-            <strong>🌡️ Temperatur:</strong><br>
-            ${text(
-              submission.temperature
-            )}
-          </p>
+              <p>
+                <strong>💡 Erkenntnis:</strong>
+                ${displayValue(item.findings)}
+              </p>
 
-          <p>
-            <strong>🌧️ Niederschlag:</strong><br>
-            ${text(
-              submission.precipitation
-            )}
-          </p>
+              ${
+                item.climate_diagram_path
+                  ? diagramHtml(
+                      item.climate_diagram_path,
+                      item.name
+                    )
+                  : `
+                      <p>
+                        <strong>📊 Klimadiagramm:</strong>
+                        keines hochgeladen
+                      </p>
+                    `
+              }
 
-          <p>
-            <strong>🌿 Vegetation:</strong><br>
-            ${text(
-              submission.vegetation
-            )}
-          </p>
+              <p>
+                <strong>🔗 Quelle:</strong>
+                ${displayValue(item.source)}
+              </p>
 
-          <p>
-            <strong>🏘️ Menschliche Nutzung:</strong><br>
-            ${text(
-              submission.human_use
-            )}
-          </p>
+              <div class="submission-actions">
 
-          <p>
-            <strong>💡 Erkenntnis:</strong><br>
-            ${text(
-              submission.findings
-            )}
-          </p>
+                <button
+                  class="approve-button"
+                  onclick="approveSubmission(${item.id})"
+                >
+                  ✅ Freigeben
+                </button>
 
-          <p>
-            <strong>🔗 Quelle:</strong><br>
-            ${text(
-              submission.source
-            )}
-          </p>
+                <button
+                  class="compare-button"
+                  onclick="openEditPlace(${item.id})"
+                >
+                  ✏️ Bearbeiten
+                </button>
 
-          <div class="submission-actions">
+                <button
+                  class="reject-button"
+                  onclick="rejectSubmission(${item.id})"
+                >
+                  ❌ Ablehnen
+                </button>
 
-            <button
-              class="approve-button"
-              onclick="approveSubmission(${submission.id})"
-            >
-              ✅ Freigeben
-            </button>
+              </div>
 
-            <button
-              class="reject-button"
-              onclick="rejectSubmission(${submission.id})"
-            >
-              ❌ Ablehnen
-            </button>
+            </div>
 
-          </div>
+          `;
 
-        `;
-
-
-        list.appendChild(
-          card
-        );
-
-      }
-    );
+        })
+        .join("");
 
   }
 
 
   /* ========================================================= */
-  /* BEITRAG FREIGEBEN */
+  /* VERÖFFENTLICHTE ORTE */
+  /* ========================================================= */
+
+  function renderApprovedSubmissions(
+    submissions
+  ) {
+
+    const list =
+      document.getElementById(
+        "approvedSubmissionList"
+      );
+
+
+    if (
+      !submissions.length
+    ) {
+
+      list.innerHTML = `
+        <div class="empty-message">
+          Noch keine veröffentlichten Orte vorhanden.
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    list.innerHTML =
+      submissions
+        .map(item => {
+
+          const zone =
+            item.climate_zones &&
+            item.climate_zones.name
+              ? item.climate_zones.name
+              : "–";
+
+
+          return `
+
+            <div class="submission-card">
+
+              <h3>
+                📍 ${text(item.name)}
+              </h3>
+
+              <p>
+                <strong>Land:</strong>
+                ${displayValue(item.country)}
+              </p>
+
+              <p>
+                <strong>Klimazone:</strong>
+                ${displayValue(zone)}
+              </p>
+
+              <p>
+                <strong>🌡️ Temperatur:</strong>
+                ${displayValue(item.temperature)}
+              </p>
+
+              <p>
+                <strong>🌧️ Niederschlag:</strong>
+                ${displayValue(item.precipitation)}
+              </p>
+
+              ${
+                item.climate_diagram_path
+                  ? diagramHtml(
+                      item.climate_diagram_path,
+                      item.name
+                    )
+                  : `
+                      <p>
+                        <strong>📊 Klimadiagramm:</strong>
+                        keines vorhanden
+                      </p>
+                    `
+              }
+
+              <div class="submission-actions">
+
+                <button
+                  class="compare-button"
+                  onclick="openEditPlace(${item.id})"
+                >
+                  ✏️ Bearbeiten
+                </button>
+
+                <button
+                  class="delete-button"
+                  onclick="deleteApprovedSubmission(${item.id})"
+                >
+                  🗑️ Von der Klimakarte entfernen
+                </button>
+
+              </div>
+
+            </div>
+
+          `;
+
+        })
+        .join("");
+
+  }
+
+
+  /* ========================================================= */
+  /* FREIGEBEN */
   /* ========================================================= */
 
   async function approveSubmission(
@@ -3430,61 +3892,82 @@
 
     const confirmed =
       confirm(
-        "Diesen Beitrag wirklich auf der Klimakarte veröffentlichen?"
+        "Diesen Beitrag auf der Klimakarte veröffentlichen?"
       );
 
 
-    if (!confirmed) {
-
+    if (
+      !confirmed
+    ) {
       return;
-
     }
 
 
-    const {
-      error
-    } =
-      await supabaseClient
-        .from(
-          "student_submissions"
-        )
-        .update({
-          status:
-            "approved"
-        })
-        .eq(
-          "id",
-          id
+    try {
+
+      const {
+        data: sessionData
+      } =
+        await supabaseClient.auth
+          .getSession();
+
+
+      if (
+        !sessionData ||
+        !sessionData.session
+      ) {
+
+        alert(
+          "Deine Anmeldung ist abgelaufen. Bitte erneut anmelden."
         );
 
+        return;
 
-    if (error) {
+      }
+
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from(
+            "student_submissions"
+          )
+          .update({
+            status:
+              "approved"
+          })
+          .eq(
+            "id",
+            id
+          );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      await loadTeacherSubmissions();
+
+      await loadApprovedSubmissions();
+
+
+    } catch (error) {
+
+      console.error(error);
 
       alert(
-        "Der Beitrag konnte nicht freigegeben werden:\n\n" +
-        error.message
+        "Der Beitrag konnte nicht freigegeben werden."
       );
 
-      return;
-
     }
-
-
-    await loadPendingSubmissions();
-
-
-    alert(
-      "✅ Beitrag wurde freigegeben."
-    );
-
-
-    location.reload();
 
   }
 
 
   /* ========================================================= */
-  /* BEITRAG ABLEHNEN */
+  /* ABLEHNEN */
   /* ========================================================= */
 
   async function rejectSubmission(
@@ -3493,281 +3976,211 @@
 
     const confirmed =
       confirm(
-        "Diesen Beitrag wirklich ablehnen?"
+        "Diesen Beitrag ablehnen?"
       );
 
 
-    if (!confirmed) {
-
+    if (
+      !confirmed
+    ) {
       return;
-
     }
 
 
-    const {
-      error
-    } =
-      await supabaseClient
-        .from(
-          "student_submissions"
-        )
-        .update({
-          status:
-            "rejected"
-        })
-        .eq(
-          "id",
-          id
+    try {
+
+      const {
+        data: sessionData
+      } =
+        await supabaseClient.auth
+          .getSession();
+
+
+      if (
+        !sessionData ||
+        !sessionData.session
+      ) {
+
+        alert(
+          "Deine Anmeldung ist abgelaufen. Bitte erneut anmelden."
         );
 
+        return;
 
-    if (error) {
+      }
+
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from(
+            "student_submissions"
+          )
+          .update({
+            status:
+              "rejected"
+          })
+          .eq(
+            "id",
+            id
+          );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      await loadTeacherSubmissions();
+
+
+    } catch (error) {
+
+      console.error(error);
 
       alert(
-        "Der Beitrag konnte nicht abgelehnt werden:\n\n" +
-        error.message
+        "Der Beitrag konnte nicht abgelehnt werden."
       );
 
-      return;
-
     }
-
-
-    await loadPendingSubmissions();
-
-
-    alert(
-      "Der Beitrag wurde abgelehnt."
-    );
 
   }
 
 
   /* ========================================================= */
-  /* VERÖFFENTLICHTE BEITRÄGE FÜR LEHRER LADEN */
+  /* VERÖFFENTLICHTEN ORT LÖSCHEN */
   /* ========================================================= */
 
-  async function loadApprovedTeacherSubmissions() {
+  async function deleteApprovedSubmission(
+    id
+  ) {
 
-    const list =
-      document.getElementById(
-        "approvedSubmissionList"
+    const place =
+      allApprovedSubmissions.find(
+        item =>
+          Number(item.id) ===
+          Number(id)
       );
 
 
-    list.innerHTML =
-      "Veröffentlichte Beiträge werden geladen ...";
+    const placeName =
+      place
+        ? place.name
+        : "diesen Ort";
 
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from(
-          "student_submissions"
-        )
-        .select(
-          "*, climate_zones(name)"
-        )
-        .eq(
-          "status",
-          "approved"
-        )
-        .order(
-          "created_at",
-          {
-            ascending: true
-          }
+    const confirmed =
+      confirm(
+        "Möchtest du " +
+        placeName +
+        " wirklich dauerhaft von der Klimakarte löschen?"
+      );
+
+
+    if (
+      !confirmed
+    ) {
+      return;
+    }
+
+
+    try {
+
+      const {
+        data: sessionData
+      } =
+        await supabaseClient.auth
+          .getSession();
+
+
+      if (
+        !sessionData ||
+        !sessionData.session
+      ) {
+
+        alert(
+          "Deine Anmeldung ist abgelaufen. Bitte erneut anmelden."
         );
 
+        return;
 
-    if (error) {
-
-      console.error(error);
-
-      list.innerHTML = `
-        <div class="submission-card">
-
-          Fehler beim Laden der
-          veröffentlichten Beiträge:
-
-          ${text(error.message)}
-
-        </div>
-      `;
-
-      return;
-
-    }
+      }
 
 
-    if (!data.length) {
+      /*
+        Wenn ein Klimadiagramm vorhanden ist,
+        wird zuerst das Bild aus dem Storage gelöscht.
+      */
 
-      list.innerHTML = `
+      if (
+        place &&
+        place.climate_diagram_path
+      ) {
 
-        <div class="empty-message">
-
-          Auf der Klimakarte sind derzeit
-          keine Orte veröffentlicht.
-
-        </div>
-
-      `;
-
-      return;
-
-    }
-
-
-    list.innerHTML = "";
+        const {
+          error: storageError
+        } =
+          await supabaseClient.storage
+            .from(
+              "climate-diagrams"
+            )
+            .remove([
+              place.climate_diagram_path
+            ]);
 
 
-    data.forEach(
-      submission => {
+        if (
+          storageError
+        ) {
 
-        const card =
-          document.createElement(
-            "div"
+          console.warn(
+            "Das Bild konnte nicht aus dem Storage gelöscht werden:",
+            storageError
+          );
+
+        }
+
+      }
+
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from(
+            "student_submissions"
+          )
+          .delete()
+          .eq(
+            "id",
+            id
+          )
+          .eq(
+            "status",
+            "approved"
           );
 
 
-        card.className =
-          "submission-card";
-
-
-        card.innerHTML = `
-
-          <div
-            style="
-              display:inline-block;
-              background:#d1e7dd;
-              color:#0f5132;
-              padding:4px 8px;
-              border-radius:5px;
-              font-size:13px;
-              font-weight:bold;
-            "
-          >
-            🟢 VERÖFFENTLICHT
-          </div>
-
-
-          <h3>
-            ${text(
-              submission.name
-            )}
-          </h3>
-
-
-          <p>
-            <strong>Land:</strong>
-            ${text(
-              submission.country
-            )}
-          </p>
-
-
-          <p>
-            <strong>Position:</strong>
-            ${text(
-              submission.latitude
-            )},
-            ${text(
-              submission.longitude
-            )}
-          </p>
-
-
-          <p>
-            <strong>Klimazone:</strong>
-            ${
-              submission.climate_zones
-              ? text(
-                  submission
-                    .climate_zones
-                    .name
-                )
-              : ""
-            }
-          </p>
-
-
-          <p>
-            <strong>🌡️ Temperatur:</strong><br>
-            ${text(
-              submission.temperature
-            )}
-          </p>
-
-
-          <p>
-            <strong>🌧️ Niederschlag:</strong><br>
-            ${text(
-              submission.precipitation
-            )}
-          </p>
-
-
-          <p>
-            <strong>🌿 Vegetation:</strong><br>
-            ${text(
-              submission.vegetation
-            )}
-          </p>
-
-
-          <p>
-            <strong>🏘️ Menschliche Nutzung:</strong><br>
-            ${text(
-              submission.human_use
-            )}
-          </p>
-
-
-          <p>
-            <strong>💡 Erkenntnis:</strong><br>
-            ${text(
-              submission.findings
-            )}
-          </p>
-
-
-          <p>
-            <strong>🔗 Quelle:</strong><br>
-            ${text(
-              submission.source
-            )}
-          </p>
-
-
-          <div class="submission-actions">
-
-            <button
-              class="compare-button"
-              onclick="openEditPlace(${submission.id})"
-            >
-              ✏️ Bearbeiten
-            </button>
-
-            <button
-              class="delete-button"
-              onclick="deleteApprovedSubmission(${submission.id})"
-            >
-              🗑️ Von der Klimakarte entfernen
-            </button>
-
-          </div>
-
-        `;
-
-
-        list.appendChild(
-          card
-        );
-
+      if (error) {
+        throw error;
       }
-    );
+
+
+      await loadApprovedSubmissions();
+
+      await loadTeacherSubmissions();
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "Der Ort konnte nicht gelöscht werden."
+      );
+
+    }
 
   }
 
@@ -3776,198 +4189,638 @@
   /* ORT BEARBEITEN */
   /* ========================================================= */
 
-  function openEditPlace(id) {
-    const submission = allApprovedSubmissions.find(item => Number(item.id) === Number(id));
-    if (!submission) {
-      alert("Der Ort konnte nicht geladen werden.");
-      return;
-    }
-
-    document.getElementById("editPlaceId").value = submission.id;
-    document.getElementById("editName").value = submission.name || "";
-    document.getElementById("editCountry").value = submission.country || "";
-    document.getElementById("editLatitude").value = submission.latitude ?? "";
-    document.getElementById("editLongitude").value = submission.longitude ?? "";
-    document.getElementById("editClimateZone").value = submission.climate_zone_id || "";
-    document.getElementById("editTemperature").value = submission.temperature || "";
-    document.getElementById("editPrecipitation").value = submission.precipitation || "";
-    document.getElementById("editVegetation").value = submission.vegetation || "";
-    document.getElementById("editHumanUse").value = submission.human_use || "";
-    document.getElementById("editFindings").value = submission.findings || "";
-    document.getElementById("editSource").value = submission.source || "";
-    document.getElementById("editPlaceModal").style.display = "block";
-  }
-
-  function closeEditPlace() {
-    document.getElementById("editPlaceModal").style.display = "none";
-  }
-
-  document.getElementById("editPlaceForm").addEventListener("submit", async function(event) {
-    event.preventDefault();
-
-    const id = Number(document.getElementById("editPlaceId").value);
-    const changes = {
-      name: document.getElementById("editName").value.trim(),
-      country: document.getElementById("editCountry").value.trim(),
-      latitude: Number(document.getElementById("editLatitude").value),
-      longitude: Number(document.getElementById("editLongitude").value),
-      climate_zone_id: Number(document.getElementById("editClimateZone").value),
-      temperature: document.getElementById("editTemperature").value.trim(),
-      precipitation: document.getElementById("editPrecipitation").value.trim(),
-      vegetation: document.getElementById("editVegetation").value.trim(),
-      human_use: document.getElementById("editHumanUse").value.trim(),
-      findings: document.getElementById("editFindings").value.trim(),
-      source: document.getElementById("editSource").value.trim()
-    };
-
-    const { error } = await supabaseClient
-      .from("student_submissions")
-      .update(changes)
-      .eq("id", id)
-      .eq("status", "approved");
-
-    if (error) {
-      alert("Die Änderungen konnten nicht gespeichert werden:\n\n" + error.message);
-      return;
-    }
-
-    alert("✅ Änderungen gespeichert.");
-    location.reload();
-  });
-
-
-  /* ========================================================= */
-  /* VERÖFFENTLICHTEN BEITRAG ENTFERNEN */
-  /* ========================================================= */
-
-  async function deleteApprovedSubmission(
+  async function openEditPlace(
     id
   ) {
 
-    const {
-      data: {
-        session
+    try {
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from(
+            "student_submissions"
+          )
+          .select(`
+            *,
+            climate_zones (
+              name
+            )
+          `)
+          .eq(
+            "id",
+            id
+          )
+          .single();
+
+
+      if (error) {
+        throw error;
       }
-    } =
-      await supabaseClient
-        .auth
-        .getSession();
 
 
-    if (!session) {
-
-      alert(
-        "Bitte zuerst als Lehrkraft anmelden."
-      );
-
-      return;
-
-    }
+      document.getElementById(
+        "editPlaceId"
+      ).value =
+        data.id;
 
 
-    const confirmed =
-      confirm(
-        "Diesen veröffentlichten Beitrag wirklich von der Klimakarte entfernen?\n\n" +
-        "Der Beitrag wird vollständig aus der Datenbank entfernt."
-      );
+      document.getElementById(
+        "editOldDiagramPath"
+      ).value =
+        data.climate_diagram_path ||
+        "";
 
 
-    if (!confirmed) {
+      document.getElementById(
+        "editName"
+      ).value =
+        data.name || "";
 
-      return;
 
-    }
+      document.getElementById(
+        "editCountry"
+      ).value =
+        data.country || "";
 
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from(
-          "student_submissions"
-        )
-        .delete()
-        .eq(
-          "id",
-          id
-        )
-        .eq(
-          "status",
-          "approved"
-        )
-        .select(
-          "id"
+      document.getElementById(
+        "editLatitude"
+      ).value =
+        data.latitude;
+
+
+      document.getElementById(
+        "editLongitude"
+      ).value =
+        data.longitude;
+
+
+      document.getElementById(
+        "editClimateZone"
+      ).value =
+        data.climate_zone_id ||
+        "";
+
+
+      document.getElementById(
+        "editTemperature"
+      ).value =
+        data.temperature || "";
+
+
+      document.getElementById(
+        "editPrecipitation"
+      ).value =
+        data.precipitation || "";
+
+
+      document.getElementById(
+        "editVegetation"
+      ).value =
+        data.vegetation || "";
+
+
+      document.getElementById(
+        "editHumanUse"
+      ).value =
+        data.human_use || "";
+
+
+      document.getElementById(
+        "editFindings"
+      ).value =
+        data.findings || "";
+
+
+      document.getElementById(
+        "editSource"
+      ).value =
+        data.source || "";
+
+
+      document.getElementById(
+        "editClimateDiagram"
+      ).value =
+        "";
+
+
+      const preview =
+        document.getElementById(
+          "editDiagramPreview"
         );
 
 
-    if (error) {
+      if (
+        data.climate_diagram_path
+      ) {
+
+        preview.innerHTML =
+          diagramHtml(
+            data.climate_diagram_path,
+            data.name
+          );
+
+      } else {
+
+        preview.innerHTML = `
+          <div class="location-status">
+            Noch kein Klimadiagramm vorhanden.
+          </div>
+        `;
+
+      }
+
+
+      document.getElementById(
+        "editPlaceModal"
+      ).style.display =
+        "block";
+
+
+    } catch (error) {
 
       console.error(error);
 
       alert(
-        "Der Beitrag konnte nicht entfernt werden:\n\n" +
-        error.message
+        "Der Ort konnte nicht zum Bearbeiten geladen werden."
       );
-
-      return;
 
     }
 
-
-    if (
-      !data ||
-      !data.length
-    ) {
-
-      alert(
-        "Der Beitrag wurde nicht gefunden oder ist nicht mehr veröffentlicht."
-      );
-
-      await loadApprovedTeacherSubmissions();
-
-      return;
-
-    }
+  }
 
 
-    alert(
-      "🗑️ Der Beitrag wurde von der Klimakarte entfernt."
+  function closeEditPlace() {
+
+    document.getElementById(
+      "editPlaceModal"
+    ).style.display =
+      "none";
+
+    document.getElementById(
+      "editPlaceForm"
+    ).reset();
+
+  }
+
+
+  /* ========================================================= */
+  /* BEARBEITETEN ORT SPEICHERN */
+  /* ========================================================= */
+
+  document
+    .getElementById(
+      "editPlaceForm"
+    )
+    .addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
+
+
+        const submitButton =
+          this.querySelector(
+            'button[type="submit"]'
+          );
+
+
+        const id =
+          Number(
+            document.getElementById(
+              "editPlaceId"
+            ).value
+          );
+
+
+        const oldDiagramPath =
+          document.getElementById(
+            "editOldDiagramPath"
+          ).value;
+
+
+        const diagramInput =
+          document.getElementById(
+            "editClimateDiagram"
+          );
+
+
+        const newDiagramFile =
+          diagramInput.files &&
+          diagramInput.files.length
+            ? diagramInput.files[0]
+            : null;
+
+
+        if (
+          !validateDiagramFile(
+            newDiagramFile
+          )
+        ) {
+          return;
+        }
+
+
+        submitButton.disabled =
+          true;
+
+        submitButton.textContent =
+          "Wird gespeichert ...";
+
+
+        let diagramPath =
+          oldDiagramPath ||
+          null;
+
+        let newlyUploadedPath =
+          null;
+
+
+        try {
+
+          const {
+            data: sessionData
+          } =
+            await supabaseClient.auth
+              .getSession();
+
+
+          if (
+            !sessionData ||
+            !sessionData.session
+          ) {
+
+            throw new Error(
+              "Die Anmeldung ist abgelaufen."
+            );
+
+          }
+
+
+          if (
+            newDiagramFile
+          ) {
+
+            submitButton.textContent =
+              "Klimadiagramm wird hochgeladen ...";
+
+
+            newlyUploadedPath =
+              await uploadClimateDiagram(
+                newDiagramFile
+              );
+
+
+            diagramPath =
+              newlyUploadedPath;
+
+          }
+
+
+          const updates = {
+
+            name:
+              document
+                .getElementById(
+                  "editName"
+                )
+                .value
+                .trim(),
+
+            country:
+              document
+                .getElementById(
+                  "editCountry"
+                )
+                .value
+                .trim(),
+
+            latitude:
+              Number(
+                document
+                  .getElementById(
+                    "editLatitude"
+                  )
+                  .value
+              ),
+
+            longitude:
+              Number(
+                document
+                  .getElementById(
+                    "editLongitude"
+                  )
+                  .value
+              ),
+
+            climate_zone_id:
+              Number(
+                document
+                  .getElementById(
+                    "editClimateZone"
+                  )
+                  .value
+              ),
+
+            temperature:
+              document
+                .getElementById(
+                  "editTemperature"
+                )
+                .value
+                .trim(),
+
+            precipitation:
+              document
+                .getElementById(
+                  "editPrecipitation"
+                )
+                .value
+                .trim(),
+
+            vegetation:
+              document
+                .getElementById(
+                  "editVegetation"
+                )
+                .value
+                .trim(),
+
+            human_use:
+              document
+                .getElementById(
+                  "editHumanUse"
+                )
+                .value
+                .trim(),
+
+            findings:
+              document
+                .getElementById(
+                  "editFindings"
+                )
+                .value
+                .trim(),
+
+            source:
+              document
+                .getElementById(
+                  "editSource"
+                )
+                .value
+                .trim(),
+
+            climate_diagram_path:
+              diagramPath
+
+          };
+
+
+          const {
+            error
+          } =
+            await supabaseClient
+              .from(
+                "student_submissions"
+              )
+              .update(
+                updates
+              )
+              .eq(
+                "id",
+                id
+              );
+
+
+          if (error) {
+            throw error;
+          }
+
+
+          /*
+            Erst nachdem der Datensatz erfolgreich
+            aktualisiert wurde, wird das alte Bild
+            entfernt.
+          */
+
+          if (
+            newDiagramFile &&
+            oldDiagramPath &&
+            oldDiagramPath !==
+              newlyUploadedPath
+          ) {
+
+            const {
+              error: removeError
+            } =
+              await supabaseClient.storage
+                .from(
+                  "climate-diagrams"
+                )
+                .remove([
+                  oldDiagramPath
+                ]);
+
+
+            if (
+              removeError
+            ) {
+
+              console.warn(
+                "Das alte Klimadiagramm konnte nicht gelöscht werden:",
+                removeError
+              );
+
+            }
+
+          }
+
+
+          alert(
+            "Die Änderungen wurden gespeichert."
+          );
+
+
+          closeEditPlace();
+
+          await loadApprovedSubmissions();
+
+          await loadTeacherSubmissions();
+
+
+        } catch (error) {
+
+          console.error(error);
+
+
+          /*
+            Falls das neue Bild hochgeladen wurde,
+            die Datenbankänderung aber fehlschlägt,
+            versuchen wir das neue Bild wieder zu entfernen.
+          */
+
+          if (
+            newlyUploadedPath
+          ) {
+
+            await supabaseClient.storage
+              .from(
+                "climate-diagrams"
+              )
+              .remove([
+                newlyUploadedPath
+              ]);
+
+          }
+
+
+          alert(
+            error.message ||
+            "Die Änderungen konnten nicht gespeichert werden."
+          );
+
+
+        } finally {
+
+          submitButton.disabled =
+            false;
+
+          submitButton.textContent =
+            "💾 Änderungen speichern";
+
+        }
+
+      }
     );
+    /* ========================================================= */
+  /* MODALS BEI KLICK AUF HINTERGRUND SCHLIESSEN */
+  /* ========================================================= */
+
+  window.addEventListener(
+    "click",
+    function(event) {
+
+      const modals = [
+        "filterModal",
+        "compareModal",
+        "studentModal",
+        "teacherLoginModal",
+        "teacherModal",
+        "editPlaceModal"
+      ];
 
 
-    await loadApprovedTeacherSubmissions();
+      modals.forEach(
+        modalId => {
+
+          const modal =
+            document.getElementById(
+              modalId
+            );
 
 
-    location.reload();
+          if (
+            event.target === modal
+          ) {
+
+            /*
+              Während der Positionsauswahl soll das
+              Schülerformular nicht versehentlich
+              beeinflusst werden.
+            */
+
+            if (
+              modalId ===
+              "studentModal" &&
+              selectingLocation
+            ) {
+              return;
+            }
+
+
+            modal.style.display =
+              "none";
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+
+  /* ========================================================= */
+  /* ESC-TASTE */
+  /* ========================================================= */
+
+  document.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key !==
+        "Escape"
+      ) {
+        return;
+      }
+
+
+      document.getElementById(
+        "filterModal"
+      ).style.display =
+        "none";
+
+      document.getElementById(
+        "compareModal"
+      ).style.display =
+        "none";
+
+      document.getElementById(
+        "studentModal"
+      ).style.display =
+        "none";
+
+      document.getElementById(
+        "teacherLoginModal"
+      ).style.display =
+        "none";
+
+      document.getElementById(
+        "teacherModal"
+      ).style.display =
+        "none";
+
+      document.getElementById(
+        "editPlaceModal"
+      ).style.display =
+        "none";
+
+
+      stopLocationSelection();
+
+    }
+  );
+
+
+  /* ========================================================= */
+  /* START DER APP */
+  /* ========================================================= */
+
+  async function startApp() {
+
+    await loadClimateZones();
+
+    await loadApprovedSubmissions();
 
   }
 
 
-  /* ========================================================= */
-  /* ABMELDEN */
-  /* ========================================================= */
+  startApp();
 
-  async function teacherLogout() {
-
-    await supabaseClient
-      .auth
-      .signOut();
-
-
-    closeTeacherArea();
-
-  }
-
-
-  /* ========================================================= */
-  /* START */
-  /* ========================================================= */
-
-  loadClimateZones();
-
-  /* Alle sichtbaren Orte kommen jetzt aus student_submissions. */
-  loadApprovedSubmissions();
 
 </script>
 
